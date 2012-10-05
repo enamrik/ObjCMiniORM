@@ -66,7 +66,7 @@
 //====================================================================
 - (void)open {
     //already opened
-	if (_database) {
+	if (_database != NULL) {
         return;
     }    
     
@@ -122,7 +122,7 @@
 //====================================================================
 //====================================================================
 -(BOOL) close {
-	if (!_database) {
+	if (_database == NULL) {
         return YES;
     }
     
@@ -149,7 +149,7 @@
     }
     while (retry);
     
-	_database = nil;
+	_database = NULL;
     return YES;
 }
 
