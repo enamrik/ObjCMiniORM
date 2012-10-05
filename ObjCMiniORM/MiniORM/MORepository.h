@@ -17,7 +17,9 @@
 @property(readonly)NSString *filePathName;
 
 -(id)init;
--(id)initWithDBFilePath:(NSString*)path;
+-(id)initWithDBFilePath:(NSString*)pathName;
+-(id)initWithBundleFile:(NSString*)name;
+-(id)initWithBundleFile:name dbFilePath:pathName;
 - (void)open;
 -(BOOL) close;
 

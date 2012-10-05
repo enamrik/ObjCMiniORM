@@ -13,7 +13,7 @@
 //#define GNDATA_MOD_DEBUG
 
 @interface MORepository ()
-
+@property(copy)NSString* bundleFile;
 @property int busyRetryTimeout;
 @end
 
@@ -22,6 +22,7 @@
 //====================================================================
 //====================================================================
 -(void)dealloc{
+    self.bundleFile=nil;
     [_filePathName release];
     [super dealloc];
 }
@@ -31,23 +32,56 @@
 -(id)init{
     self=[super init];
     if (self) {
-        self.busyRetryTimeout =10;
         _filePathName = [MORepository defaultDatabasePath];
         [_filePathName retain];
+        [self initSetup];
     }
     return self;
 }
 
 //====================================================================
 //====================================================================
--(id)initWithDBFilePath:(NSString*)path{
+-(id)initWithDBFilePath:(NSString*)pathName{
     self=[super init];
     if (self) {
-        _filePathName = path;
+        _filePathName = pathName;
         [_filePathName retain];
-        self.busyRetryTimeout =10;
+        [self initSetup];
     }
     return self;
+}
+
+//====================================================================
+//====================================================================
+-(id)initWithBundleFile:(NSString*)name{
+    self=[super init];
+    if (self) {
+        self.bundleFile = name;
+        _filePathName = [[[MORepository defaultDatabasePath]stringByDeletingLastPathComponent]
+            stringByAppendingPathComponent:self.bundleFile];
+        [_filePathName retain];
+        [self initSetup];
+    }
+    return self;
+}
+
+//====================================================================
+//====================================================================
+-(id)initWithBundleFile:name dbFilePath:pathName{
+    self=[super init];
+    if (self) {
+        self.bundleFile = name;
+        _filePathName = pathName;
+        [_filePathName retain];
+        [self initSetup];
+    }
+    return self;
+}
+
+//====================================================================
+//====================================================================
+-(void)initSetup{
+    self.busyRetryTimeout =10;
 }
 
 //====================================================================
@@ -73,7 +107,7 @@
     }    
     
     ///copy database from bundle if does not exist
-    [self checkAndCreateDBFromPath];
+    [self checkAndCreateDBFromBundle];
 
     if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) == SQLITE_OK) {
         //NSLog(@"Can now use sqlite on multiple threads, using the same connection");
@@ -88,37 +122,22 @@
 
 //====================================================================
 //====================================================================
--(void) checkAndCreateDBFromPath{
-	
-	// Check if the SQL database has already been saved to the users phone, if not then copy it over
-	BOOL success;
-	NSString* databasePathAndName;
-	NSString* databaseName;
-	NSFileManager *fileManager;
-	NSString *databasePathFromApp;
-	
-	databasePathAndName=self.filePathName;
-	databaseName=[[self.filePathName lastPathComponent] stringByDeletingPathExtension];
-	
-	// Create a FileManager object, we will use this to check the status
-	// of the database and to copy it over if required
-	fileManager = [NSFileManager defaultManager];
-	
-	// Check if the database has already been created in the users filesystem
-	success = [fileManager fileExistsAtPath:databasePathAndName];
-	
-	// If the database already exists then return without doing anything
-	if(success)return;
-	
-	// If not then proceed to copy the database from the application to the users filesystem
-	
-	// Get the path to the database in the application package
-	databasePathFromApp = [[[NSBundle mainBundle] resourcePath] 
-        stringByAppendingPathComponent:databaseName];
-	
-	// Copy the database from the package to the users filesystem
-	[fileManager copyItemAtPath:databasePathFromApp toPath:databasePathAndName error:nil];
-    
+-(void) checkAndCreateDBFromBundle{
+
+    //if database exist, do nothing
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    if([fileManager fileExistsAtPath:self.filePathName]){
+        return;
+    }
+    NSError*error;
+    //if we have a database file in the bundle, use it
+    if(self.bundleFile){
+    	NSString *dbBundlePath = [[[NSBundle mainBundle] resourcePath]
+            stringByAppendingPathComponent:self.bundleFile];
+        [fileManager copyItemAtPath:dbBundlePath toPath:self.filePathName error:&error];
+    }
+    //if we get here, sqlite will automatically create the database if not found at the path the user
+    //specified or at the default path 
 }
 
 //====================================================================

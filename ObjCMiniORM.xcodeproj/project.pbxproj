@@ -24,6 +24,8 @@
 		B89279EE161C293A00091333 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B89279ED161C293A00091333 /* Default-568h@2x.png */; };
 		B89279F5161C29AE00091333 /* MORepository.m in Sources */ = {isa = PBXBuildFile; fileRef = B89279F4161C29AE00091333 /* MORepository.m */; };
 		B89279F8161C2B2200091333 /* ModelProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = B89279F7161C2B2200091333 /* ModelProperty.m */; };
+		B8D271BB161F039600643555 /* test.db in Resources */ = {isa = PBXBuildFile; fileRef = B8D271BA161F039600643555 /* test.db */; };
+		B8D271C0161F0A9B00643555 /* test.db in Resources */ = {isa = PBXBuildFile; fileRef = B8D271BA161F039600643555 /* test.db */; };
 		B8EB31B5161E79B300B6389F /* DatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B8EB31B4161E79B300B6389F /* DatabaseTests.m */; };
 		B8EB31B8161E7D7900B6389F /* TestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B8EB31B7161E7D7900B6389F /* TestModel.m */; };
 /* End PBXBuildFile section */
@@ -65,6 +67,7 @@
 		B89279F4161C29AE00091333 /* MORepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MORepository.m; sourceTree = "<group>"; };
 		B89279F6161C2B2200091333 /* ModelProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelProperty.h; sourceTree = "<group>"; };
 		B89279F7161C2B2200091333 /* ModelProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelProperty.m; sourceTree = "<group>"; };
+		B8D271BA161F039600643555 /* test.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.db; path = ../../ObjCMiniORMTests/test.db; sourceTree = "<group>"; };
 		B8EB31B3161E79B300B6389F /* DatabaseTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseTests.h; sourceTree = "<group>"; };
 		B8EB31B4161E79B300B6389F /* DatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseTests.m; sourceTree = "<group>"; };
 		B8EB31B6161E7D7900B6389F /* TestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestModel.h; sourceTree = "<group>"; };
@@ -176,6 +179,7 @@
 		B89279E0161C26FB00091333 /* MiniORM */ = {
 			isa = PBXGroup;
 			children = (
+				B8D271BA161F039600643555 /* test.db */,
 				B89279F6161C2B2200091333 /* ModelProperty.h */,
 				B89279F7161C2B2200091333 /* ModelProperty.m */,
 				B89279F3161C29AE00091333 /* MORepository.h */,
@@ -277,6 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B89279EE161C293A00091333 /* Default-568h@2x.png in Resources */,
+				B8D271C0161F0A9B00643555 /* test.db in Resources */,
 				B82EB5B3161C352300D7FB19 /* HomeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -286,6 +291,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B89279D4161C264000091333 /* InfoPlist.strings in Resources */,
+				B8D271BB161F039600643555 /* test.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
