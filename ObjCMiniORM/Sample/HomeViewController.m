@@ -42,7 +42,7 @@
         
         if(tableExists==false){
             //create contact table
-            NSString*setupSql=@"create table contact(contactid int, fullName text, addedOn number)";
+            NSString*setupSql=@"create table contact(contactid integer primary key, fullName text, addedOn number)";
             [self.repository executeSQL:setupSql withParameters:nil];
         }
     }
