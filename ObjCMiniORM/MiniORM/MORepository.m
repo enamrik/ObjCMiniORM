@@ -13,7 +13,7 @@
 //#define GNDATA_MOD_DEBUG
 
 @interface MORepository ()
-@property(copy)NSString *filePathName;
+
 @property int busyRetryTimeout;
 @end
 
@@ -22,7 +22,7 @@
 //====================================================================
 //====================================================================
 -(void)dealloc{
-    self.filePathName=nil;
+    [_filePathName release];
     [super dealloc];
 }
 
@@ -32,7 +32,7 @@
     self=[super init];
     if (self) {
         self.busyRetryTimeout =10;
-        self.filePathName = [MORepository getDefaultDatabasePath];
+        _filePathName = [MORepository getDefaultDatabasePath];
     }
     return self;
 }
@@ -42,7 +42,7 @@
 -(id)initWithDBFilePath:(NSString*)path{
     self=[super init];
     if (self) {
-        self.filePathName = path;
+        _filePathName = path;
         self.busyRetryTimeout =10;
     }
     return self;

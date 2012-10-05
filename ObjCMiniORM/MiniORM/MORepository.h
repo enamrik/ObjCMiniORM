@@ -14,6 +14,8 @@
     sqlite3 *_database;
 }
 
+@property(readonly, copy)NSString *filePathName;
+
 -(id)init;
 -(id)initWithDBFilePath:(NSString*)path;
 - (void)open;
