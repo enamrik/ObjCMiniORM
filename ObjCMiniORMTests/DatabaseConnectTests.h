@@ -8,6 +8,6 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-@interface ObjCMiniORMTests : SenTestCase
+@interface DatabaseConnectTests : SenTestCase
 
 @end

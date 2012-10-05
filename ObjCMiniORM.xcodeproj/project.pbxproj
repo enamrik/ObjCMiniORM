@@ -18,12 +18,14 @@
 		B89279CB161C264000091333 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B89279AB161C263F00091333 /* UIKit.framework */; };
 		B89279CC161C264000091333 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B89279AD161C263F00091333 /* Foundation.framework */; };
 		B89279D4161C264000091333 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B89279D2161C264000091333 /* InfoPlist.strings */; };
-		B89279D7161C264000091333 /* ObjCMiniORMTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B89279D6161C264000091333 /* ObjCMiniORMTests.m */; };
+		B89279D7161C264000091333 /* DatabaseConnectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B89279D6161C264000091333 /* DatabaseConnectTests.m */; };
 		B89279E7161C273D00091333 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B89279E2161C273D00091333 /* main.m */; };
 		B89279E8161C273D00091333 /* MOAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B89279E4161C273D00091333 /* MOAppDelegate.m */; };
 		B89279EE161C293A00091333 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B89279ED161C293A00091333 /* Default-568h@2x.png */; };
 		B89279F5161C29AE00091333 /* MORepository.m in Sources */ = {isa = PBXBuildFile; fileRef = B89279F4161C29AE00091333 /* MORepository.m */; };
 		B89279F8161C2B2200091333 /* ModelProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = B89279F7161C2B2200091333 /* ModelProperty.m */; };
+		B8EB31B5161E79B300B6389F /* DatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B8EB31B4161E79B300B6389F /* DatabaseTests.m */; };
+		B8EB31B8161E7D7900B6389F /* TestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B8EB31B7161E7D7900B6389F /* TestModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +53,8 @@
 		B89279C9161C264000091333 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		B89279D1161C264000091333 /* ObjCMiniORMTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ObjCMiniORMTests-Info.plist"; sourceTree = "<group>"; };
 		B89279D3161C264000091333 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		B89279D5161C264000091333 /* ObjCMiniORMTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCMiniORMTests.h; sourceTree = "<group>"; };
-		B89279D6161C264000091333 /* ObjCMiniORMTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjCMiniORMTests.m; sourceTree = "<group>"; };
+		B89279D5161C264000091333 /* DatabaseConnectTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatabaseConnectTests.h; sourceTree = "<group>"; };
+		B89279D6161C264000091333 /* DatabaseConnectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DatabaseConnectTests.m; sourceTree = "<group>"; };
 		B89279E2161C273D00091333 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B89279E3161C273D00091333 /* MOAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAppDelegate.h; sourceTree = "<group>"; };
 		B89279E4161C273D00091333 /* MOAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOAppDelegate.m; sourceTree = "<group>"; };
@@ -63,6 +65,10 @@
 		B89279F4161C29AE00091333 /* MORepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MORepository.m; sourceTree = "<group>"; };
 		B89279F6161C2B2200091333 /* ModelProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelProperty.h; sourceTree = "<group>"; };
 		B89279F7161C2B2200091333 /* ModelProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelProperty.m; sourceTree = "<group>"; };
+		B8EB31B3161E79B300B6389F /* DatabaseTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseTests.h; sourceTree = "<group>"; };
+		B8EB31B4161E79B300B6389F /* DatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseTests.m; sourceTree = "<group>"; };
+		B8EB31B6161E7D7900B6389F /* TestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestModel.h; sourceTree = "<group>"; };
+		B8EB31B7161E7D7900B6389F /* TestModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,8 +153,12 @@
 		B89279CF161C264000091333 /* ObjCMiniORMTests */ = {
 			isa = PBXGroup;
 			children = (
-				B89279D5161C264000091333 /* ObjCMiniORMTests.h */,
-				B89279D6161C264000091333 /* ObjCMiniORMTests.m */,
+				B89279D5161C264000091333 /* DatabaseConnectTests.h */,
+				B89279D6161C264000091333 /* DatabaseConnectTests.m */,
+				B8EB31B3161E79B300B6389F /* DatabaseTests.h */,
+				B8EB31B4161E79B300B6389F /* DatabaseTests.m */,
+				B8EB31B6161E7D7900B6389F /* TestModel.h */,
+				B8EB31B7161E7D7900B6389F /* TestModel.m */,
 				B89279D0161C264000091333 /* Supporting Files */,
 			);
 			path = ObjCMiniORMTests;
@@ -315,7 +325,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B89279D7161C264000091333 /* ObjCMiniORMTests.m in Sources */,
+				B89279D7161C264000091333 /* DatabaseConnectTests.m in Sources */,
+				B8EB31B5161E79B300B6389F /* DatabaseTests.m in Sources */,
+				B8EB31B8161E7D7900B6389F /* TestModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,7 +435,7 @@
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ObjCMiniORM/ObjCMiniORM-Prefix.pch";
+				GCC_PREFIX_HEADER = "ObjCMiniORM/SupportingFiles/ObjCMiniORM-Prefix.pch";
 				INFOPLIST_FILE = "ObjCMiniORMTests/ObjCMiniORMTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -440,7 +452,7 @@
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ObjCMiniORM/ObjCMiniORM-Prefix.pch";
+				GCC_PREFIX_HEADER = "ObjCMiniORM/SupportingFiles/ObjCMiniORM-Prefix.pch";
 				INFOPLIST_FILE = "ObjCMiniORMTests/ObjCMiniORMTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
