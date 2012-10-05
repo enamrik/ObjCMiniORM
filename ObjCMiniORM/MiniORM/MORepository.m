@@ -32,7 +32,8 @@
     self=[super init];
     if (self) {
         self.busyRetryTimeout =10;
-        _filePathName = [MORepository getDefaultDatabasePath];
+        _filePathName = [MORepository defaultDatabasePath];
+        [_filePathName retain];
     }
     return self;
 }
@@ -43,6 +44,7 @@
     self=[super init];
     if (self) {
         _filePathName = path;
+        [_filePathName retain];
         self.busyRetryTimeout =10;
     }
     return self;
@@ -50,7 +52,7 @@
 
 //====================================================================
 //====================================================================
-+(NSString*)getDefaultDatabasePath{
++(NSString*)defaultDatabasePath{
 	NSArray *documentPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
 	NSString *documentsDir = [documentPaths objectAtIndex:0];
 	return [documentsDir stringByAppendingPathComponent:@"data.db"];
@@ -58,7 +60,7 @@
 
 //====================================================================
 //====================================================================
--(sqlite3*)getDatabase{
+-(sqlite3*)sqliteDatabase{
     return _database;
 }
 

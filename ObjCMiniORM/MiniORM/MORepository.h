@@ -14,7 +14,7 @@
     sqlite3 *_database;
 }
 
-@property(readonly, copy)NSString *filePathName;
+@property(readonly)NSString *filePathName;
 
 -(id)init;
 -(id)initWithDBFilePath:(NSString*)path;
@@ -43,6 +43,7 @@
 -(void)rollback;
 -(void)commitTransaction;
 
--(sqlite3*)getDatabase;
+-(sqlite3*)sqliteDatabase;
++(NSString*)defaultDatabasePath;
 
 @end
