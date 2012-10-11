@@ -100,10 +100,10 @@
 
 //====================================================================
 //====================================================================
-- (void)open {
+- (BOOL)open {
     //already opened
 	if (_database != NULL) {
-        return;
+        return YES;
     }    
     
     ///copy database from bundle if does not exist
@@ -116,8 +116,10 @@
 	if (sqlite3_open([self.filePathName UTF8String], &_database) != SQLITE_OK) {
 		// Even though the open failed, call close to properly clean up resources.
         sqlite3_close(_database);
-        NSAssert1(0, @"Failed to open database with message '%s'.", sqlite3_errmsg(_database));
+        NSLog(@"Failed to open database with message '%s'.", sqlite3_errmsg(_database));
+        return NO;
 	}
+    return YES;
 }
 
 //====================================================================

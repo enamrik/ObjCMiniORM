@@ -20,7 +20,7 @@
 -(id)initWithDBFilePath:(NSString*)pathName;
 -(id)initWithBundleFile:(NSString*)name;
 -(id)initWithBundleFile:name dbFilePath:pathName;
-- (void)open;
+-(BOOL)open;
 -(BOOL) close;
 
 -(void)commit:(id)object;
