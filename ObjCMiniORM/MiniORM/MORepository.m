@@ -638,12 +638,14 @@ andProperties:(NSArray*)properties{
         }
         
         if (AllOkay==false){
+            rowsAffected = -1;
             NSLog(@"SQL failed. '%s'.", sqlite3_errmsg(_database));
         }
         
         sqlite3_finalize(compiledStatement);
     }
     @catch (NSException *exception) {
+        rowsAffected=-1;
         NSLog(@"Error in executeSQL:%@",[exception description]);
     }
     return rowsAffected;
