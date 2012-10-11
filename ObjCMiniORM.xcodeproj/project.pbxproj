@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B8283BCE1626095500A54557 /* TestScriptFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B8283BCD1626095500A54557 /* TestScriptFile.m */; };
+		B8283BD2162642D700A54557 /* MODbModelMeta.m in Sources */ = {isa = PBXBuildFile; fileRef = B8283BD1162642D700A54557 /* MODbModelMeta.m */; };
+		B8283BD51626430900A54557 /* ModelMetaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B8283BD41626430900A54557 /* ModelMetaTests.m */; };
 		B82EB5AC161C340E00D7FB19 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B82EB5AB161C340E00D7FB19 /* libsqlite3.0.dylib */; };
 		B82EB5B2161C352300D7FB19 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B82EB5B0161C352300D7FB19 /* HomeViewController.m */; };
 		B82EB5B3161C352300D7FB19 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B82EB5B1161C352300D7FB19 /* HomeViewController.xib */; };
@@ -26,6 +29,8 @@
 		B89279F8161C2B2200091333 /* ModelProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = B89279F7161C2B2200091333 /* ModelProperty.m */; };
 		B8D271BB161F039600643555 /* test.db in Resources */ = {isa = PBXBuildFile; fileRef = B8D271BA161F039600643555 /* test.db */; };
 		B8D271C0161F0A9B00643555 /* test.db in Resources */ = {isa = PBXBuildFile; fileRef = B8D271BA161F039600643555 /* test.db */; };
+		B8D271D91620048500643555 /* MigrationsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B8D271D81620048500643555 /* MigrationsTests.m */; };
+		B8D271DD162020B500643555 /* MODbMigrator.m in Sources */ = {isa = PBXBuildFile; fileRef = B8D271DC162020B500643555 /* MODbMigrator.m */; };
 		B8EB31B5161E79B300B6389F /* DatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B8EB31B4161E79B300B6389F /* DatabaseTests.m */; };
 		B8EB31B8161E7D7900B6389F /* TestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B8EB31B7161E7D7900B6389F /* TestModel.m */; };
 /* End PBXBuildFile section */
@@ -41,6 +46,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B8283BCC1626095500A54557 /* TestScriptFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestScriptFile.h; sourceTree = "<group>"; };
+		B8283BCD1626095500A54557 /* TestScriptFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestScriptFile.m; sourceTree = "<group>"; };
+		B8283BD0162642D700A54557 /* MODbModelMeta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODbModelMeta.h; sourceTree = "<group>"; };
+		B8283BD1162642D700A54557 /* MODbModelMeta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODbModelMeta.m; sourceTree = "<group>"; };
+		B8283BD31626430900A54557 /* ModelMetaTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelMetaTests.h; sourceTree = "<group>"; };
+		B8283BD41626430900A54557 /* ModelMetaTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelMetaTests.m; sourceTree = "<group>"; };
 		B82EB5AB161C340E00D7FB19 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		B82EB5AF161C352300D7FB19 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		B82EB5B0161C352300D7FB19 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
@@ -68,6 +79,10 @@
 		B89279F6161C2B2200091333 /* ModelProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelProperty.h; sourceTree = "<group>"; };
 		B89279F7161C2B2200091333 /* ModelProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelProperty.m; sourceTree = "<group>"; };
 		B8D271BA161F039600643555 /* test.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.db; path = ../../ObjCMiniORMTests/test.db; sourceTree = "<group>"; };
+		B8D271D71620048500643555 /* MigrationsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MigrationsTests.h; sourceTree = "<group>"; };
+		B8D271D81620048500643555 /* MigrationsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MigrationsTests.m; sourceTree = "<group>"; };
+		B8D271DB162020B500643555 /* MODbMigrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODbMigrator.h; sourceTree = "<group>"; };
+		B8D271DC162020B500643555 /* MODbMigrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODbMigrator.m; sourceTree = "<group>"; };
 		B8EB31B3161E79B300B6389F /* DatabaseTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseTests.h; sourceTree = "<group>"; };
 		B8EB31B4161E79B300B6389F /* DatabaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseTests.m; sourceTree = "<group>"; };
 		B8EB31B6161E7D7900B6389F /* TestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestModel.h; sourceTree = "<group>"; };
@@ -160,8 +175,14 @@
 				B89279D6161C264000091333 /* DatabaseConnectTests.m */,
 				B8EB31B3161E79B300B6389F /* DatabaseTests.h */,
 				B8EB31B4161E79B300B6389F /* DatabaseTests.m */,
+				B8D271D71620048500643555 /* MigrationsTests.h */,
+				B8D271D81620048500643555 /* MigrationsTests.m */,
 				B8EB31B6161E7D7900B6389F /* TestModel.h */,
 				B8EB31B7161E7D7900B6389F /* TestModel.m */,
+				B8283BCC1626095500A54557 /* TestScriptFile.h */,
+				B8283BCD1626095500A54557 /* TestScriptFile.m */,
+				B8283BD31626430900A54557 /* ModelMetaTests.h */,
+				B8283BD41626430900A54557 /* ModelMetaTests.m */,
 				B89279D0161C264000091333 /* Supporting Files */,
 			);
 			path = ObjCMiniORMTests;
@@ -184,6 +205,10 @@
 				B89279F7161C2B2200091333 /* ModelProperty.m */,
 				B89279F3161C29AE00091333 /* MORepository.h */,
 				B89279F4161C29AE00091333 /* MORepository.m */,
+				B8D271DB162020B500643555 /* MODbMigrator.h */,
+				B8D271DC162020B500643555 /* MODbMigrator.m */,
+				B8283BD0162642D700A54557 /* MODbModelMeta.h */,
+				B8283BD1162642D700A54557 /* MODbModelMeta.m */,
 			);
 			path = MiniORM;
 			sourceTree = "<group>";
@@ -324,6 +349,8 @@
 				B89279F8161C2B2200091333 /* ModelProperty.m in Sources */,
 				B82EB5B2161C352300D7FB19 /* HomeViewController.m in Sources */,
 				B82EB5B6161C356D00D7FB19 /* Contact.m in Sources */,
+				B8D271DD162020B500643555 /* MODbMigrator.m in Sources */,
+				B8283BD2162642D700A54557 /* MODbModelMeta.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +361,9 @@
 				B89279D7161C264000091333 /* DatabaseConnectTests.m in Sources */,
 				B8EB31B5161E79B300B6389F /* DatabaseTests.m in Sources */,
 				B8EB31B8161E7D7900B6389F /* TestModel.m in Sources */,
+				B8D271D91620048500643555 /* MigrationsTests.m in Sources */,
+				B8283BCE1626095500A54557 /* TestScriptFile.m in Sources */,
+				B8283BD51626430900A54557 /* ModelMetaTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

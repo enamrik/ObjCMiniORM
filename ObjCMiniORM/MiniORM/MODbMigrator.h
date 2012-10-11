@@ -7,7 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
+@class MORepository,MODbModelMeta;
+
+@protocol IScriptFile <NSObject>
+-(double)timestamp;
+-(NSString*)sql;
+-(BOOL)runBeforeModelUpdate;
+@end
+
 
 @interface MODbMigrator : NSObject
 
+@property(strong)NSArray* runBeforeScripts;
+@property(strong)NSArray* modelScripts;
+@property(strong)NSArray* runAfterScripts;
+
+-(id)initWithRepo:(MORepository*)repo andMeta:(MODbModelMeta*)meta;
+-(BOOL)updateDatabaseAndRunScripts:(BOOL)runScripts;
+-(NSArray*)registeredScriptFiles;
+-(void)registerScriptFile:(id<IScriptFile>)scriptFile;
++(NSString*)migrationTableName;
 @end
