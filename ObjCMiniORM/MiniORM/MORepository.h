@@ -21,6 +21,7 @@
 -(id)initWithBundleFile:(NSString*)name;
 -(id)initWithBundleFile:name dbFilePath:pathName;
 -(BOOL)open;
+-(BOOL)isOpened;
 -(BOOL) close;
 
 -(void)commit:(id)object;

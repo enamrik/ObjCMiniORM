@@ -46,7 +46,6 @@ modelMeta;
     self.runBeforeScripts=nil;
     self.modelMeta=nil;
     self.scriptFiles=nil;
-    [self.repository close];
     self.repository=nil;
     [super dealloc];
 }
@@ -56,7 +55,6 @@ modelMeta;
     if (self) {
         self.modelMeta=meta;
         self.repository=repo;
-        [self.repository open];
         [self checkCreateScriptTable];
         self.scriptFiles = [NSMutableArray array];
     }
@@ -72,6 +70,10 @@ modelMeta;
 }
 
 -(BOOL)updateDatabaseAndRunScripts:(BOOL)runScripts{
+    
+    if([self.repository isOpened] == false){
+        [NSException raise:@"OpenedRepositoryRequired" format:@"Migrator requires an opened repository"];
+    }
     
     NSArray* scriptsToRun = [self getScriptFilesThatHaventBeenRun];
     
