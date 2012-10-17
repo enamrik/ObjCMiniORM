@@ -15,29 +15,26 @@ To get started, add the **libsqlite3.0.dylib** framework to your project. Then c
 
 #####Connecting to a Database
 
-You may setup a single instance of **MORepository** for your entire application or use one instance per controller or whatever works best for you.
+Create a new repository:
 
-To create a new repository, do the following:
-
+	//creates sqlite database named data.db in Library folder
     MORepository* repository = [[MORepository alloc]init];
 
-Then you can open a connection to the database by calling:
-
-	[repository open];
-	
-So where's the database? Well because the repository was created using the default constructor, a database named data.db is automatically created for you and stored in the Library folder of your application. If a database with that name already exits in the Library folder, it won't be overriden but will be used instead. This is a nice feature for getting prototypes up quickly. If you would like to specify the path to an existing database, pass the path in when creating your repository:
-
+	//creates sqlite database in specified folder with specified file name
     MORepository* repository = [[MORepository alloc]initWithDBFilePath:pathAndName];
-    
-If the database does not exist at that path, one will be created at that path with the given name. More often than not, you'll want to package a database in you application bundle and have the repository copy that database to the application installation folder when the application starts up (this is a one time event). To do this create the repository this way:
 
+	//copies sqlite database from application bundle to Library folder
     MORepository* repository = [[MORepository alloc]initWithBundleFile:name];
     
-Creating the repository this way will cause the repository to first check the bundle for a database file with the specified name at the root of the bundle. If the database file is found in the bundle, it will be copied to the Library folder. If the file already exists in the Library folder, no copy takes place and the existing database will be used. If you want the database bundle file to be stored at a different path from the Library folder with a different name, then create your repository like this:
-
+    //copies sqlite database from application bundle to specified folder with specified file name
     MORepository* repository = [[MORepository alloc]initWithBundleFile:name dbFilePath:pathAndName];
+    
+Open a connection:
 
-To close the database, call the close method:
+    [repository open];
+    
+
+Close connection:
 
 	[repository close];
 	
