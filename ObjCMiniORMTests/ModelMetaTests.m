@@ -103,4 +103,88 @@
     STAssertTrue([[meta propertyGetName]isEqualToString:@"fullName"], @"WillSetCurrentModelByName");
 }
 
+-(void)testWillMergeModels{
+    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    [meta modelAddByName:@"MyModel"];
+    
+    MODbModelMeta *meta2 = [[[MODbModelMeta alloc]init]autorelease];
+    [meta2 modelAddByName:@"MyModel2"];
+    
+    [meta merge:meta2];
+    
+    STAssertTrue([meta modelCount] == 2, @"WillMergeModels");
+    [meta modelSetCurrentByIndex:1];
+    STAssertTrue([[meta modelGetName]isEqualToString:@"MyModel2"], @"WillMergeModels");
+}
+
+-(void)testWillPreserveExistingModelsOnMerge{
+    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    [meta modelAddByName:@"MyModel"];
+    [meta modelSetTableName:@"MyTable"];
+    
+    MODbModelMeta *meta2 = [[[MODbModelMeta alloc]init]autorelease];
+    [meta2 modelAddByName:@"MyModel"];
+    [meta2 modelSetTableName:@"MyTableDifferentName"];
+    
+    [meta merge:meta2];
+    
+    STAssertTrue([meta modelCount] == 1, @"WillPreserveExistingModelsOnMerge");
+    STAssertTrue([[meta modelGetTableName]isEqualToString:@"MyTable"], @"WillPreserveExistingModelsOnMerge");
+}
+
+-(void)testWillMergeProperties{
+    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    [meta modelAddByName:@"MyModel"];
+    [meta propertyAdd:@"ModelName"];
+    
+    MODbModelMeta *meta2 = [[[MODbModelMeta alloc]init]autorelease];
+    [meta2 modelAddByName:@"MyModel"];
+    [meta2 propertyAdd:@"MyModelId"];
+    
+    [meta merge:meta2];
+    
+    STAssertTrue([meta propertyCount] == 2, @"WillMergeProperties");
+    [meta propertySetCurrentByIndex:1];
+    STAssertTrue([[meta propertyGetName]isEqualToString:@"MyModelId"], @"WillMergeProperties");
+}
+
+-(void)testWillPreserveExistingPropertiesOnMerge{
+    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    [meta modelAddByName:@"MyModel"];
+    [meta propertyAdd:@"ModelName"];
+    
+    MODbModelMeta *meta2 = [[[MODbModelMeta alloc]init]autorelease];
+    [meta2 modelAddByName:@"MyModel"];
+    [meta2 propertyAdd:@"ModelName"];
+    
+    [meta merge:meta2];
+    
+    STAssertTrue([meta propertyCount] == 1, @"WillPreserveExistingPropertiesOnMerge");
+    STAssertTrue([[meta propertyGetName]isEqualToString:@"ModelName"], @"WillPreserveExistingPropertiesOnMerge");
+}
+
+-(void)testWillGetPrimaryKeyName{
+    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    [meta modelAddByName:@"MyModel"];
+    [meta propertyAdd:@"Name"];
+    [meta propertyAdd:@"Id"];
+    [meta propertySetIsKey:true];
+
+    STAssertTrue([[meta modelGetPrimaryKeyName]isEqualToString:@"Id"], @"WillGetPrimaryKeyName");
+}
+
+-(void)testPrimaryKeyIsMutuallyExclusive{
+    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    [meta modelAddByName:@"MyModel"];
+    [meta propertyAdd:@"Name"];
+    [meta propertyAdd:@"Id"];
+    [meta propertySetIsKey:true];
+    
+    [meta propertySetCurrentByIndex:0];
+    [meta propertySetIsKey:true];
+
+    [meta propertySetCurrentByIndex:1];
+    STAssertTrue([meta propertyGetIsKey] == false, @"WillGetPrimaryKeyName");
+}
+
 @end

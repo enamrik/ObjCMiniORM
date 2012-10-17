@@ -20,6 +20,13 @@
 @end
 @implementation MOScriptFile
 @synthesize fileTimestamp,fileSql;
+-(id)init{
+    self=[super init];
+    if (self) {
+        self.fileTimestamp = [[NSDate date] timeIntervalSince1970];
+    }
+    return self;
+}
 -(void)dealloc{
     self.fileSql=nil;
     [super dealloc];
@@ -115,7 +122,6 @@ modelMeta;
         if([results count] == 0){
             MOScriptFile *file = [[MOScriptFile alloc]init];
             file.fileSql = [self generateCreateTableScriptForMeta];
-            file.fileTimestamp=[[NSDate date] timeIntervalSince1970];
             [sqlScripts addObject:file];
             [file release];
         }
@@ -135,7 +141,6 @@ modelMeta;
                         [self.modelMeta modelGetTableName],[self.modelMeta propertyGetColumnName],sqliteType];
                     MOScriptFile *file = [[MOScriptFile alloc]init];
                     file.fileSql = alterSql;
-                    file.fileTimestamp=[[NSDate date] timeIntervalSince1970];
                     [sqlScripts addObject:file];
                     [file release];
                 }

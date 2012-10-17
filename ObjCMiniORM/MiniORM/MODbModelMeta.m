@@ -55,12 +55,15 @@
     return[self.currentModel objectForKey:@"name"];
 }
 
--(void)modelSetCurrentByName:(NSString*)modelName{
+-(BOOL)modelSetCurrentByName:(NSString*)modelName{
     self.currentModel =[self findModel:modelName];
+    return self.currentModel != nil;
 }
 
--(void)modelSetCurrentByIndex:(int)index{
+-(BOOL)modelSetCurrentByIndex:(int)index{
+    if(index >= [self modelCount]) return false;
     self.currentModel = [self.meta objectAtIndex:index];
+    return true;
 }
 
 -(void)modelSetTableName:(NSString*)tableName{
@@ -71,27 +74,47 @@
     return [self.currentModel objectForKey:@"tableName"];
 }
 
+
+-(NSString*)modelGetPrimaryKeyName{
+    int propertyCount  = [self propertyCount];
+    for(int propertyIndex = 0; propertyIndex<propertyCount;propertyIndex++){
+        [self propertySetCurrentByIndex:propertyIndex];
+        if([self propertyGetIsKey]){
+            return [self propertyGetName];
+        }
+    }
+    return nil;
+}
+
 -(void)propertyAdd:(NSString*)propertyName{
     NSMutableDictionary* property = [self findProperty:propertyName];
     if(property==nil){
-        property = [NSMutableDictionary dictionary];
-        [property setObject:propertyName forKey:@"name"];
-        [property setObject:propertyName forKey:@"columnName"];
-        [[self.currentModel objectForKey:@"properties"]addObject:property];
+        property = [self addProperty:propertyName];
     }
     self.currentProperty = property;
+}
+
+-(NSMutableDictionary*)addProperty:(NSString*)propertyName{
+    NSMutableDictionary* property = [NSMutableDictionary dictionary];
+    [property setObject:propertyName forKey:@"name"];
+    [property setObject:propertyName forKey:@"columnName"];
+    [[self.currentModel objectForKey:@"properties"]addObject:property];
+    return property;
 }
 
 -(NSString*)propertyGetName{
     return [self.currentProperty objectForKey:@"name"];
 }
 
--(void)propertySetCurrentByName:(NSString*)propertyName{
+-(BOOL)propertySetCurrentByName:(NSString*)propertyName{
   self.currentProperty = [self findProperty:propertyName];
+  return self.currentProperty != nil;
 }
 
--(void)propertySetCurrentByIndex:(int)index{
+-(BOOL)propertySetCurrentByIndex:(int)index{
+    if(index >= [self propertyCount]) return false;
     self.currentProperty = [[self.currentModel objectForKey:@"properties"]objectAtIndex:index];
+    return true;
 }
 
 -(void)propertySetColumnName:(NSString*)columnName{
@@ -111,11 +134,28 @@
 }
 
 -(void)propertySetIsKey:(BOOL)isKey{
+    [self clearPrimaryKey];
     [self.currentProperty setObject:[NSNumber numberWithBool:isKey] forKey:@"isKey"];
 }
 
 -(BOOL)propertyGetIsKey{
     return [[self.currentProperty objectForKey:@"isKey"]boolValue];
+}
+
+-(void)propertySetIsReadOnly:(BOOL)isReadOnly{
+    [self.currentProperty setObject:[NSNumber numberWithBool:isReadOnly] forKey:@"isReadOnly"];
+}
+
+-(BOOL)propertyGetIsReadOnly{
+    return [[self.currentProperty objectForKey:@"isReadOnly"]boolValue];
+}
+
+-(void)propertySetIgnore:(BOOL)ignore{
+    [self.currentProperty setObject:[NSNumber numberWithBool:ignore] forKey:@"ignore"];
+}
+
+-(BOOL)propertyGetIgnore{
+    return [[self.currentProperty objectForKey:@"ignore"]boolValue];
 }
 
 -(int)modelCount{
@@ -125,7 +165,6 @@
 -(int)propertyCount{
     return [[self.currentModel objectForKey:@"properties"] count];
 }
-
 
 -(NSMutableDictionary*)findProperty:(NSString*)name{
     NSArray* properties = [self.currentModel objectForKey:@"properties"];
@@ -155,14 +194,25 @@
         
         NSString* propName =[NSString  stringWithCString:propertyName
                 encoding:NSUTF8StringEncoding];
-        [self propertyAdd:propName];
-        if([propName caseInsensitiveCompare:
-            [NSString stringWithFormat:@"%@Id",[self modelGetTableName]]]==NSOrderedSame){
-            [self propertySetIsKey:true];
+        NSMutableDictionary* property = [self findProperty:propName];
+        if(property==nil){
+            property = [self addProperty:propName];
+            self.currentProperty = property;
+            [self setupNewClassProperty:propName i:i properties:properties];
         }
-        [self propertySetType:[self property_getTypeString:properties[i]]];
+        else{
+            self.currentProperty = property;
+        }
     }
     free(properties);
+}
+
+- (void)setupNewClassProperty:(NSString *)propName i:(int)i properties:(objc_property_t *)properties {
+    if([propName caseInsensitiveCompare:
+        [NSString stringWithFormat:@"%@Id",[self modelGetTableName]]]==NSOrderedSame){
+        [self propertySetIsKey:true];
+    }
+    [self propertySetType:[self property_getTypeString:properties[i]]];
 }
 
 -(NSString*) property_getTypeString:( objc_property_t) property {
@@ -181,6 +231,45 @@
 	buffer[len] = '\0';
     
 	return [NSString  stringWithCString:buffer encoding:NSUTF8StringEncoding];
+}
+
+-(void)merge:(MODbModelMeta*)modelMeta{
+
+    int modelsCount = [modelMeta modelCount];
+    for(int modelIndex = 0; modelIndex<modelsCount;modelIndex++){
+    
+        [modelMeta modelSetCurrentByIndex:modelIndex];
+        NSMutableDictionary*localModel = [self findModel:[modelMeta modelGetName]];
+        
+        if(localModel){
+            int propertyCount  = [modelMeta propertyCount];
+            for(int propertyIndex = 0; propertyIndex<propertyCount;propertyIndex++){
+            
+                [modelMeta propertySetCurrentByIndex:propertyIndex];
+                
+                if([self findProperty:[modelMeta propertyGetName]] == false){
+                    NSMutableDictionary* property = [modelMeta performSelector:@selector(findProperty:)
+                        withObject:[modelMeta propertyGetName]];
+                    [[localModel objectForKey:@"properties"]addObject:property];
+                }
+            }
+        }
+        else{
+            NSMutableDictionary* model = [modelMeta performSelector:@selector(findModel:)
+                withObject:[modelMeta modelGetName]];
+            [self.meta addObject:model];
+        }
+    }
+}
+
+
+-(NSString*)clearPrimaryKey{
+    int propertyCount  = [self propertyCount];
+    for(int propertyIndex = 0; propertyIndex<propertyCount;propertyIndex++){
+        [self propertySetCurrentByIndex:propertyIndex];
+        [self propertySetIsKey:false];
+    }
+    return nil;
 }
 
 @end

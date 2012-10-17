@@ -7,12 +7,13 @@
 //
 
 #import "MORepository.h"
-#import "ModelProperty.h"
+#import "MODbModelMeta.h"
 
 //#define GNDATA_QUERY_DEBUG
 //#define GNDATA_MOD_DEBUG
 
 @interface MORepository ()
+@property(strong)MODbModelMeta* modelMeta;
 @property(copy)NSString* bundleFile;
 @property int busyRetryTimeout;
 @end
@@ -22,6 +23,7 @@
 //====================================================================
 //====================================================================
 -(void)dealloc{
+    self.modelMeta=nil;
     self.bundleFile=nil;
     [_filePathName release];
     [super dealloc];
@@ -82,6 +84,13 @@
 //====================================================================
 -(void)initSetup{
     self.busyRetryTimeout =10;
+    self.modelMeta = [[[MODbModelMeta alloc]init]autorelease];
+}
+
+//====================================================================
+//====================================================================
+-(void) mergeModelMeta:(MODbModelMeta*)meta{
+    [self.modelMeta merge:meta];
 }
 
 //====================================================================
@@ -190,86 +199,45 @@
     }
     
     Class type=[object class];
-    NSString* tableName =[NSString stringWithCString:
-        class_getName(type)encoding:NSUTF8StringEncoding];
+    [self.modelMeta modelAddByType:type];
     
-    NSArray *properties=[MORepository getPropertiesForClass:type];
-    NSString* pkName=[MORepository getPkName:object forTableName:tableName withProperties:properties];
-    
-    [self commit:object inTable:tableName withPK:pkName andProperties:properties];
-}
-
-//====================================================================
-//====================================================================
--(void)commit:(id)object inTable:(NSString*)tableName withPK:(NSString*)pkName{
- 
-    Class type=[object class];
-    NSArray *properties=[MORepository getPropertiesForClass:type];
-    [self commit:object inTable:tableName withPK:pkName andProperties:properties];
-}
-
-//====================================================================
-//====================================================================
--(void)commit:(id)object inTable:(NSString*)tableName withPK:(NSString*)pkName
-andProperties:(NSArray*)properties{
-    int pkId = [[object valueForKey:pkName]intValue];
+    int pkId = [[object valueForKey:[self.modelMeta modelGetPrimaryKeyName]]intValue];
     if (pkId==0) {
-        [self insert:object intoTable:tableName withPK:pkName andProperties:properties];
+        [self insert:object];
     }
     else{
-        [self update:object inTable:tableName withPK:pkName andProperties:properties];
+        [self update:object];
     }
 }
 
 //====================================================================
 //====================================================================
 -(void)update:(id)object{
-    
     if (!object) {
         return;
     }
     
     Class type=[object class];
-    NSArray *properties=[MORepository getPropertiesForClass:type];
-    
-    NSString* tableName =[NSString stringWithCString:class_getName(type)
-        encoding:NSUTF8StringEncoding];
-    
-    NSString* pkName=[MORepository getPkName:object forTableName:tableName withProperties:properties];
-    
-    [self update:object inTable:tableName withPK:pkName andProperties:properties];
-}
-
-//====================================================================
-//====================================================================
--(void)update:(id)object inTable:(NSString*)tableName withPK:(NSString*)pkName{
-    
-    Class type=[object class];
-    NSArray *properties=[MORepository getPropertiesForClass:type];
-    
-    [self insert:object intoTable:tableName withPK:pkName andProperties:properties];
-    
-}
-
-//====================================================================
-//====================================================================
--(void)update:(id)object inTable:(NSString*)tableName withPK:(NSString*)pkName
-andProperties:(NSArray*)properties{
+    [self.modelMeta modelAddByType:type];
     
     NSMutableString *sql=[[NSMutableString alloc]init];
     NSMutableArray *paramsArray=[[NSMutableArray alloc]init];
-    int index=0;
+    
+    NSString* pkName =[self.modelMeta modelGetPrimaryKeyName];
+    NSString* tableName = [self.modelMeta modelGetTableName];
     
     [sql appendString:@"update "];
     [sql appendString:tableName];
     [sql appendString:@" set "];
     
-    for (ModelProperty *property in properties) {
+    int propertyCount  = [self.modelMeta propertyCount];
+    int index=0;
+    for(int propertyIndex = 0; propertyIndex<propertyCount;propertyIndex++){
+        [self.modelMeta propertySetCurrentByIndex:propertyIndex];
         
-        if ([property.propertyName caseInsensitiveCompare:pkName]==NSOrderedSame) {
-            continue;
-        }
-        if (property.isReadOnly) {
+        if ([self.modelMeta propertyGetIsKey]
+            ||[self.modelMeta propertyGetIsReadOnly]
+            || [self.modelMeta propertyGetIgnore]) {
             continue;
         }
         
@@ -277,10 +245,10 @@ andProperties:(NSArray*)properties{
             [sql appendString:@","];
         }
         
-        [sql appendString:property.propertyName];
+        [sql appendString:[self.modelMeta propertyGetColumnName]];
         
         
-        id value=[object valueForKey:property.propertyName];
+        id value=[object valueForKey:[self.modelMeta propertyGetName]];
         if (value) {
             [sql appendString:@" = ?"];
             [paramsArray addObject:value];
@@ -307,26 +275,16 @@ andProperties:(NSArray*)properties{
 //====================================================================
 //====================================================================
 -(void)delete:(id)object{
-    
+ 
     if (!object) {
         return;
     }
     
     Class type=[object class];
-    NSArray *properties=[MORepository getPropertiesForClass:type];
+    [self.modelMeta modelAddByType:type];
     
-    NSString* tableName =[NSString stringWithCString:class_getName(type)
-         encoding:NSUTF8StringEncoding];
-    
-    NSString* pkName=[MORepository getPkName:object forTableName:tableName withProperties:properties];
-    
-    [self delete:object fromTable:tableName withPK:pkName];
-}
-
-//====================================================================
-//====================================================================
--(void)delete:(id)object fromTable:(NSString*)tableName withPK:(NSString*)pkName{
- 
+    NSString* tableName = [self.modelMeta modelGetTableName];
+    NSString* pkName =[self.modelMeta modelGetPrimaryKeyName];
     NSNumber *pkValue=(NSNumber*)[object valueForKey:pkName];
     
     NSMutableString *sql=[[NSMutableString alloc]init];
@@ -344,32 +302,16 @@ andProperties:(NSArray*)properties{
 //====================================================================
 //====================================================================
 -(void)insert:(id)object{
+
+    if (!object) {
+        return;
+    }
     
     Class type=[object class];
-    NSArray *properties=[MORepository getPropertiesForClass:type];
+    [self.modelMeta modelAddByType:type];
     
-    NSString* tableName =[NSString stringWithCString:class_getName(type)
-       encoding:NSUTF8StringEncoding];
-    
-    NSString* pkName=[MORepository getPkName:object forTableName:tableName withProperties:properties];
-    
-    [self insert:object intoTable:tableName withPK:pkName andProperties:properties];
-}
-
-//====================================================================
-//====================================================================
--(void)insert:(id)object intoTable:(NSString*)tableName withPK:(NSString*)pkName{
-    
-    Class type=[object class];
-    NSArray *properties=[MORepository getPropertiesForClass:type];
-    
-    [self insert:object intoTable:tableName withPK:pkName andProperties:properties];
-}
-
-//====================================================================
-//====================================================================
--(void)insert:(id)object intoTable:(NSString*)tableName withPK:(NSString*)pkName
-andProperties:(NSArray*)properties{
+    NSString* pkName =[self.modelMeta modelGetPrimaryKeyName];
+    NSString* tableName = [self.modelMeta modelGetTableName];
     
     NSMutableString *sql=[[NSMutableString alloc]init];
     NSMutableString *paramsSql=[[NSMutableString alloc]init];
@@ -381,12 +323,14 @@ andProperties:(NSArray*)properties{
     [sql appendString:@"("];
     
     [paramsSql appendString:@" values("];
-    for (ModelProperty *property in properties) {
-     
-        if ([property.propertyName caseInsensitiveCompare:pkName]==NSOrderedSame) {
-            continue;
-        }
-        if (property.isReadOnly) {
+    
+    int propertyCount  = [self.modelMeta propertyCount];
+    for(int propertyIndex = 0; propertyIndex<propertyCount;propertyIndex++){
+        [self.modelMeta propertySetCurrentByIndex:propertyIndex];
+        
+        if ([self.modelMeta propertyGetIsKey]
+            ||[self.modelMeta propertyGetIsReadOnly]
+            || [self.modelMeta propertyGetIgnore]) {
             continue;
         }
         
@@ -395,10 +339,9 @@ andProperties:(NSArray*)properties{
             [paramsSql appendString:@","];
         }
         
-        [sql appendString:property.propertyName];
+        [sql appendString:[self.modelMeta propertyGetColumnName]];
         
-        
-        id value=[object valueForKey:property.propertyName];
+        id value=[object valueForKey:[self.modelMeta propertyGetName]];
         if (value) {
             [paramsSql appendString:@"?"];
             [paramsArray addObject:value];
@@ -470,31 +413,25 @@ andProperties:(NSArray*)properties{
 
 //====================================================================
 //====================================================================
--(NSArray*)query:(NSString*) sql  withParameters:(NSArray *)params forType:(Class)clazz{
+-(NSArray*)query:(NSString*) sql  withParameters:(NSArray *)params forType:(Class)type{
     #ifdef GNDATA_QUERY_DEBUG
-        NSLog(@"query: %@, withParameters:%@, forType:%@", sql,params,  NSStringFromClass(clazz));
+        NSLog(@"query: %@, withParameters:%@, forType:%@", sql,params,  NSStringFromClass(type));
     #endif    
-    NSMutableArray *records=[[[NSMutableArray alloc]init]autorelease];
     
-    NSArray *properties=[MORepository getPropertiesForClass:clazz];
+    NSMutableArray *records=[[[NSMutableArray alloc]init]autorelease];
     sqlite3_stmt* stat=[self executeSQLReader:sql withParameters:params];
 	
+    [self.modelMeta modelAddByType:type];
 	if (stat!=nil) {
         NSArray *columns=[MORepository getQueryColumns:stat];
-        
 		while (sqlite3_step(stat) == SQLITE_ROW) {
-			
-            id newObject = [MORepository mapRecord:stat toType:clazz
-                withProperties:properties andColumns:columns];
+            id newObject = [self mapRecord:stat andColumns:columns forType:type];
             [records addObject:newObject];
 		}
-		
 	}
 	
 	sqlite3_finalize(stat);
-	
 	return records;
-    
 }
 
 //====================================================================
@@ -734,54 +671,37 @@ andProperties:(NSArray*)properties{
     return AllOkay;
 }
 
-
 //====================================================================
 //====================================================================
-+(NSString*)getPkName:(id)object forTableName:(NSString*)tableName withProperties:(NSArray*)properties{
-    
-    NSString* pkName=@"Id";
-    int index;
-
-    index=[self indexOfCaseInsensitiveString:pkName inArray:properties stringProp:@"propertyName"];
-    if (index==NSNotFound) {
-        
-        pkName=[tableName stringByAppendingString:@"Id"];
-        index=[self indexOfCaseInsensitiveString:pkName inArray:properties stringProp:@"propertyName"];
-        
-        if (index==NSNotFound) {
-            return @"";
-        }
-    }
-    
-    pkName=[(ModelProperty*)[properties objectAtIndex:index]propertyName];
-    
-    return pkName;
-}
-
-//====================================================================
-//====================================================================
-+(id)mapRecord:(sqlite3_stmt*)stat toType:(Class)clazz withProperties:(NSArray*)properties
-andColumns:(NSArray*)columns{
+-(id)mapRecord:(sqlite3_stmt*)stat andColumns:(NSArray*)columns forType:(Class)type{
     
     int columnIndex;
-    id object = [[[clazz alloc] init]autorelease];
+    id object = [[[type alloc] init]autorelease];
     
-    for (ModelProperty *property in properties) {
+    int propertyCount  = [self.modelMeta propertyCount];
+    
+    for(int propertyIndex = 0; propertyIndex<propertyCount;propertyIndex++){
+        [self.modelMeta propertySetCurrentByIndex:propertyIndex];
         
-        columnIndex=[self indexOfCaseInsensitiveString:property.propertyDbName inArray:columns];
+        if ([self.modelMeta propertyGetIgnore]) {
+            continue;
+        }
+        
+        columnIndex=[MORepository indexOfCaseInsensitiveString:
+            [self.modelMeta propertyGetColumnName] inArray:columns];
         if (columnIndex==-1) {
             continue;
         }
         
         int sqlType =sqlite3_column_type(stat, columnIndex);
-        NSString *type=property.propertyType;
+        NSString *type=[self.modelMeta propertyGetType];
         id propValue =nil;
         
         //float or double
         if([type compare:@"Tf"]==NSOrderedSame || [type compare:@"Td"]==NSOrderedSame){
         
             propValue=[NSNumber numberWithFloat:
-                       [self floatForColumnIndex:columnIndex andStatement:stat]];
+                       [MORepository floatForColumnIndex:columnIndex andStatement:stat]];
             
         }
         //int, long, bool, long long
@@ -789,30 +709,30 @@ andColumns:(NSArray*)columns{
                 || [type compare:@"Tc"]==NSOrderedSame || [type compare:@"Tq"]==NSOrderedSame){
         
             propValue=[NSNumber numberWithInteger:
-                       [self intForColumnIndex:columnIndex andStatement:stat]];
+                       [MORepository intForColumnIndex:columnIndex andStatement:stat]];
         }
         else if ([type compare:@"T@\"NSString\""]==NSOrderedSame) {
             
-            propValue=[self stringForColumnIndex:columnIndex andStatement:stat];
+            propValue=[MORepository stringForColumnIndex:columnIndex andStatement:stat];
         }
         else if([type compare:@"T@\"NSNumber\""]==NSOrderedSame){
             
             if (sqlType == SQLITE_INTEGER) {
                 propValue=[NSNumber numberWithInt:
-                           [self intForColumnIndex:columnIndex andStatement:stat]];
+                           [MORepository intForColumnIndex:columnIndex andStatement:stat]];
             }
             else if(sqlType == SQLITE_FLOAT) {
                 propValue=[NSNumber numberWithFloat:
-                           [self floatForColumnIndex:columnIndex andStatement:stat]];
+                           [MORepository floatForColumnIndex:columnIndex andStatement:stat]];
             }
         }
         else if([type compare:@"T@\"NSDate\""]==NSOrderedSame){
            
-            propValue=[self dateForColumnIndex:columnIndex andStatement:stat];
+            propValue=[MORepository dateForColumnIndex:columnIndex andStatement:stat];
         }
 
         if(propValue)
-            [object setValue:propValue forKey:property.propertyName];
+            [object setValue:propValue forKey:[self.modelMeta propertyGetName]];
     }
       
     return object;
@@ -839,68 +759,6 @@ andColumns:(NSArray*)columns{
     }
     
     return  propValue;
-}
-
-//====================================================================
-//====================================================================
-+(NSArray*)getPropertiesForClass:(Class)clazz{
-    
-    unsigned int count;
-    
-    objc_property_t* properties = class_copyPropertyList(clazz, &count);
-    NSMutableArray* propertyArray = [NSMutableArray arrayWithCapacity:count];
-    
-    for (int i = 0; i < count ; i++)
-    {
-        const char* propertyName = property_getName(properties[i]);
-        
-        NSString* propName =[NSString  stringWithCString:propertyName 
-                encoding:NSUTF8StringEncoding];
-                
-        NSRange prefix =[propName rangeOfString:@"na_"];
-        if (prefix.length>0 && prefix.location==0) {
-            continue;
-        }
-        
-        ModelProperty *property=[[ModelProperty alloc]init];
-        prefix =[propName rangeOfString:@"ro_"];
-        property.isReadOnly=prefix.length>0 && prefix.location==0;
-        property.propertyName = propName;      
-        if (property.isReadOnly) {
-            property.propertyDbName=[property.propertyName substringFromIndex:prefix.length];
-        }
-        else{
-            property.propertyDbName=property.propertyName;
-        }
-        property.propertyType=[self property_getTypeString:properties[i]];
-        
-        [propertyArray  addObject:property];
-        [property release];
-    }
-    free(properties);
-    
-    return propertyArray;
-}
-
-//====================================================================
-//====================================================================
-+(NSString*) property_getTypeString:( objc_property_t) property {
-    
-	const char * attrs = property_getAttributes( property );
-	if ( attrs == NULL )
-		return ( NULL );
-    
-	static char buffer[256];
-	const char * e = strchr( attrs, ',' );
-	if ( e == NULL )
-		return ( NULL );
-    
-	int len = (int)(e - attrs);
-	memcpy( buffer, attrs, len );
-	buffer[len] = '\0';
-    
-	return [NSString  stringWithCString:buffer 
-                               encoding:NSUTF8StringEncoding];
 }
 
 //====================================================================

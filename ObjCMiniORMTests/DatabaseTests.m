@@ -9,6 +9,12 @@
 #import "DatabaseTests.h"
 #import "MORepository.h"
 #import "TestModel.h"
+#import "MODbModelMeta.h"
+#import "TestModel2.h"
+
+@interface DatabaseTests()
+@property(strong)MODbModelMeta* modelMeta;
+@end
 
 @implementation DatabaseTests
 
@@ -33,6 +39,13 @@ static MORepository* _repository = nil;
 
 - (void)setUp{
     [super setUp];
+    self.modelMeta = [[[MODbModelMeta alloc]init]autorelease];
+    [self.modelMeta modelAddByType:TestModel.class];
+    [self.modelMeta propertySetCurrentByName:@"readonlyProperty"];
+    [self.modelMeta propertySetIsReadOnly:true];
+    [self.modelMeta propertySetCurrentByName:@"ignoreProperty"];
+    [self.modelMeta propertySetIgnore:true];
+    [_repository mergeModelMeta:self.modelMeta];
     [_repository beginDeferredTransaction];
 }
 
@@ -160,13 +173,13 @@ static MORepository* _repository = nil;
         withParameters:[NSArray arrayWithObject:[NSNumber numberWithInt:model.testModelId]]
         forType:TestModel.class] objectAtIndex:0];
     
-    STAssertTrue([queryModel.ro_readonlyProperty isEqualToString:@"5"], @"Will Load ReadOnly Properties");
+    STAssertTrue([queryModel.readonlyProperty isEqualToString:@"5"], @"Will Load ReadOnly Properties");
 }
 
--(void)testWillIgnoreNAProperties{
+-(void)testWillIgnoreProperties{
     TestModel *model = [[[TestModel alloc]init]autorelease];
     model.fullName=@"theModelName";
-    model.na_ignoreProperty =@"5";
+    model.ignoreProperty =@"5";
     [_repository commit:model];
  
     TestModel* queryModel = [[_repository
@@ -174,7 +187,33 @@ static MORepository* _repository = nil;
         withParameters:[NSArray arrayWithObject:[NSNumber numberWithInt:model.testModelId]]
         forType:TestModel.class] objectAtIndex:0];
     
-    STAssertFalse([queryModel.na_ignoreProperty isEqualToString:@"5"], @"Will Ignore NA Properties");
+    STAssertFalse([queryModel.ignoreProperty isEqualToString:@"5"], @"Will Ignore NA Properties");
+}
+
+-(void)testWillWorkWithInternalModelMeta{
+    TestModel2 *model = [[[TestModel2 alloc]init]autorelease];
+    model.fullName=@"theModelName";
+
+    MORepository * repository = [[MORepository alloc]init];
+    [repository open];
+    [repository beginDeferredTransaction];
+    
+    [repository executeSQL:
+        @"create table testmodel2(testmodel2id integer primary key, fullName text, modelDate number)"
+        withParameters:nil];
+    
+    [repository commit:model];
+    
+    TestModel2* queryModel = [[repository
+        query:@"select * from TestModel2 where testModel2Id = ? "
+        withParameters:[NSArray arrayWithObject:[NSNumber numberWithInt:model.testModel2Id]]
+        forType:TestModel2.class] objectAtIndex:0];
+    
+    [repository rollback];
+    [repository close];
+    [repository release];
+    
+    STAssertTrue(queryModel != nil, @"WillWorkWithInternalModelMeta");
 }
 
 @end

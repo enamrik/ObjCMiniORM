@@ -11,7 +11,7 @@
 @interface TestModel : NSObject
 @property int testModelId;
 @property(copy)NSString*fullName;
-@property(copy)NSString* ro_readonlyProperty;
-@property(copy)NSString* na_ignoreProperty;
+@property(copy)NSString* readonlyProperty;
+@property(copy)NSString* ignoreProperty;
 @property(strong)NSDate *modelDate;
 @end

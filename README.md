@@ -1,6 +1,6 @@
 ###About
 
-ObjCMiniORM is a mini-ORM for iOS that works with Sqlite3. It was the end result of a lot of Google searches and is continually being updated as I learn more about Objective-C and Sqlite. 
+ObjCMiniORM is a mini-ORM and database migration tool for iOS that works with Sqlite3.
 
 ###Getting Started
 
@@ -8,8 +8,13 @@ To get started, add the **libsqlite3.0.dylib** framework to your project. Then c
 
 * MORepository.h
 * MORepository.m
-* ModelProperty.h
-* ModelProperty.m
+* MODbModelMeta.h
+* MODbModelMeta.h
+
+To use the migration feature, also add the following files to your project:
+
+* MODbMigrator.h
+* MODbMigrator.m
 
 ###Usage
 
@@ -40,9 +45,12 @@ Close connection:
 	
 #####Working with Objects
 
-ObjCMiniORM will work with any Objective-C object that contains properties. Your objects do not need to inherit from a base class. To a complish this, ObjCMiniORM depends on certain conventions. The most important is that the object must have the same name as the table in the database from which it will be loaded and each object/table must have an INTEGER PRIMARY KEY field named <table-name>id. This is a very strict convention which is not friendly to greenfield projects. Future versions of ObjCMiniORM will provide more ways to override these conventions through configuration.
+If **MODbModelMeta** isn't being used for manual mapping, ObjCMiniORM uses certain conventions for mapping objects. These conventions are:
 
-Let's create an object:
+* The class name much be the same as the table name
+* A primary key is required, must be an integer and must be named <table-name>id
+
+Given the following object:
 
 	@interface Contact : NSObject
 	@property int contactId;
@@ -54,7 +62,7 @@ Let's create an object:
 	//assume ARC and auto-syn properties
 	@end
 	
-This object will only map to a table with the following schema:
+and schema:
 
 	CREATE TABLE contact
 	(
@@ -63,31 +71,65 @@ This object will only map to a table with the following schema:
 		addedOn NUMBER
 	)
 
-Note, every property on the object must have an associated field on the database table but not necessarily the other way around. Let's create our object:
+new records can be added as follows:
 
     Contact *contact=[][[Contact alloc]init]autorelease];
-    contact.fullName = self.txtContactName.text;
+    contact.fullName = @"Name";
     contact.addedOn = [NSDate date];
-    
-To insert our new object, either user the **insert** method like so: 
-
-	[repository insert:contact];
-	
-or use the **commit** method like so:
-
 	[repository commit:contact];
 
-The commit method is more convenient because it will perform an insert or update based on whether the primary key has a number greater than zero or not. To query the object, execute the following SQL:
+or updated as follows:
 
 	NSArray* results =[repository
 	   query:@"select * from contact where contactId  = ?"
 	   withParameters:[NSArray arrayWithObject:[NSNumber numberWithInt:1]]
 	   forType:[Contact class]];
+	   
+	Contact *contact=[results objectAtIndex:1];
+	contact.fullName = @"Change Name";
+	[repository commit:contact];
+	
+#####Customizing Model Metadata
 
-This will return to us an array of contacts. In our case this would be an array with a single item, the one we just created.
+**MODbModelMeta** is used for manually mapping models and properties which overrides the conventions **MORepository** uses:
 
-###Coming Soon!!
+    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    
+    //register a model
+    [meta modelAddByType:Contact.class];
+    
+    //change the name of the mapped table
+    [meta modelSetTableName:@"tblContact"];
+    
+    //change the table column that is mapped to a property
+    [meta propertySetCurrentByName:@"ContactId"];
+    [meta propertySetColumnName:@"Id"];
+    
+    //change which column is the primary key
+    [meta propertySetCurrentByName:@"AnotherId"];
+    [meta propertySetIsKey:true];
+    
+    //give the metadata to a repository
+	[self.repository mergeModelMeta:meta];
+	
+	
+#####Migrations
 
-* A migrations framework that will generate update scripts by doing a diff between the database and the models. The migration framework will also support adding simple sql text and will keep track of scripts executed in a special database table
-* More convenience methods for querying e.g.[repository getById:<id> forType:<class>]
-* More configuration options for working with existing sqlite databases
+**MODbMigrator** is used to update a database. A **MODbModelMeta** object must be used to specify which classes are mapped to database tables.
+
+    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    [meta modelAddByType:Contact.class];
+    [meta modelAddByType:Animal.class];
+    
+    //requires an already opened MORepository
+    MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:self.repository andMeta:meta]autorelease];
+    [migrator updateDatabaseAndRunScripts:true];
+    
+**MODbMigrator** can also run script files. Script files are only run once and are tracked in a database table to make sure they're never run again. Thes script files can be flagged as needing to run before or after the model update. Any object can be a script file if it implements the protocol **IScriptFile**. Script files are added to the **MODbMigrator** using the method `registerScriptFile:(id<IScriptFile>)scriptFile`.
+
+
+
+
+
+
+

@@ -24,6 +24,8 @@
 
 -(void)testCreateScriptTableIfNotExists{
     MORepository *repository=[[[MORepository alloc]init]autorelease];
+    [repository open];
+    
     [[[MODbMigrator alloc]initWithRepo:repository andMeta:nil]autorelease];
     
      BOOL check =[[repository
@@ -35,6 +37,7 @@
 
 -(void)testWillRegisterScriptsAndOrderThem{
     MORepository *repository=[[[MORepository alloc]init]autorelease];
+    [repository open];
     MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:nil]autorelease];
     
     id<IScriptFile>script=[[[TestScriptFile alloc]initWithTimestamp:88 andSql:@"sql"] autorelease];
@@ -54,6 +57,7 @@
 
 -(void)testGetAllScriptsThatHaventRun{
     MORepository *repository=[[[MORepository alloc]init]autorelease];
+    [repository open];
     MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:nil]autorelease];
     
     [migrator performSelector:@selector(checkCreateScriptTable)];
@@ -79,6 +83,7 @@
 
 -(void)testWillGetTableNames{
     MORepository *repository=[[[MORepository alloc]init]autorelease];
+    [repository open];
     MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:nil]autorelease];
     NSArray* tablesSchema = [migrator performSelector:@selector(getTableDbMeta)];
     
@@ -92,6 +97,7 @@
 
 -(void)testWillGetColumnDataForTable{
     MORepository *repository=[[[MORepository alloc]init]autorelease];
+    [repository open];
     MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:nil]autorelease];
     NSArray* columnSchema = [migrator performSelector:@selector(getColumnDbMetaForTable:)
         withObject:[MODbMigrator migrationTableName]];
@@ -107,6 +113,7 @@
 -(void)testCreateTableForModelIfNotInDb{
     MODbModelMeta *meta=[[[MODbModelMeta alloc]init]autorelease];
     MORepository *repository=[[[MORepository alloc]init]autorelease];
+    [repository open];
     MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:meta]autorelease];
     
     [meta modelAddByName:@"TestTable"];
@@ -128,6 +135,7 @@
 -(void)testAddColumnsToExistingTable{
     MODbModelMeta *meta=[[[MODbModelMeta alloc]init]autorelease];
     MORepository *repository=[[[MORepository alloc]init]autorelease];
+    [repository open];
     MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:meta]autorelease];
     
     [repository executeSQL:@"create table MyTable(TestTableId INTEGER PRIMARY KEY)" withParameters:nil];
@@ -155,6 +163,7 @@
 -(void)testSetupManualBindings{
     MODbModelMeta *meta=[[[MODbModelMeta alloc]init]autorelease];
     MORepository *repository=[[[MORepository alloc]init]autorelease];
+    [repository open];
     MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:meta]autorelease];
     
     [meta modelAddByName:@"TestTable"];

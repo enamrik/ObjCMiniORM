@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 #import <objc/runtime.h>
+@class MODbModelMeta;
 
 @interface MORepository : NSObject{
     sqlite3 *_database;
@@ -20,18 +21,16 @@
 -(id)initWithDBFilePath:(NSString*)pathName;
 -(id)initWithBundleFile:(NSString*)name;
 -(id)initWithBundleFile:name dbFilePath:pathName;
+
+-(void) mergeModelMeta:(MODbModelMeta*)meta;
 -(BOOL)open;
 -(BOOL)isOpened;
 -(BOOL) close;
 
 -(void)commit:(id)object;
--(void)commit:(id)object inTable:(NSString*)tableName withPK:(NSString*)pkName;
 -(void)update:(id)object;
--(void)update:(id)object inTable:(NSString*)tableName withPK:(NSString*)pkName;
 -(void)delete:(id)object;
--(void)delete:(id)object fromTable:(NSString*)tableName withPK:(NSString*)pkName;
 -(void)insert:(id)object;
--(void)insert:(id)object intoTable:(NSString*)tableName withPK:(NSString*)pkName;
 
 -(NSArray*)query:(NSString*) sql  withParameters:(NSArray *)params forType:(Class)clazz;
 -(NSArray*)query:(NSString*) sql  withParameters:(NSArray *)params;
