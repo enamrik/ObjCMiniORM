@@ -172,7 +172,7 @@ modelMeta;
 -(BOOL)runUpdateBeforeScripts:(NSArray*)before modelScripts:(NSArray*)model
     afterScripts:(NSArray*)after{
     
-    if(![self executeScripts:self.runBeforeScripts])return false;
+    if(![self executeScripts:before])return false;
     if(![self executeScripts:model])return false;
     if(![self executeScripts:after])return false;
     return true;
