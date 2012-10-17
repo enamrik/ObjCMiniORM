@@ -16,9 +16,7 @@ To use the migration feature, also add the following files to your project:
 * MODbMigrator.h
 * MODbMigrator.m
 
-###Usage
-
-#####Connecting to a Database
+###Connecting to a Database
 
 Create a new repository:
 
@@ -43,7 +41,7 @@ Close connection:
 
 	[repository close];
 	
-#####Working with Objects
+###Working with Objects
 
 If **MODbModelMeta** isn't being used for manual mapping, ObjCMiniORM uses certain conventions for mapping objects. These conventions are:
 
@@ -89,7 +87,7 @@ or updated as follows:
 	contact.fullName = @"Change Name";
 	[repository commit:contact];
 	
-#####Customizing Model Metadata
+###Customizing Model Metadata
 
 **MODbModelMeta** is used for manually mapping models and properties which overrides the conventions **MORepository** uses:
 
@@ -113,7 +111,7 @@ or updated as follows:
 	[self.repository mergeModelMeta:meta];
 	
 	
-#####Migrations
+###Migrations
 
 **MODbMigrator** is used to update a database. A **MODbModelMeta** object must be used to specify which classes are mapped to database tables.
 
