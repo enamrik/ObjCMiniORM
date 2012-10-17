@@ -9,6 +9,8 @@
 #import "HomeViewController.h"
 #import "MORepository.h"
 #import "Contact.h"
+#import "MODbMigrator.h"
+#import "MODbModelMeta.h"
 
 @interface HomeViewController ()
 @property(strong)MORepository*repository;
@@ -34,17 +36,17 @@
     if (self) {
         //create database using default path and name
         self.repository = repo;
+
+        //run migrations
+        MODbModelMeta *meta = [[MODbModelMeta alloc]init];
+        [meta modelAddByType:Contact.class];
+        MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:self.repository andMeta:meta];
+        [migrator updateDatabaseAndRunScripts:true];
+        [meta release];
+        [migrator release];
         
-        //check if contacts table exists
-        BOOL tableExists =[[self.repository
-            executeSQLScalar:@"SELECT count(*) FROM sqlite_master WHERE type='table' AND name=?;"
-            withParameters:[NSArray arrayWithObject:@"contact"]] intValue] > 0;
-        
-        if(tableExists==false){
-            //create contact table
-            NSString*setupSql=@"create table contact(contactid integer primary key, fullName text, addedOn number)";
-            [self.repository executeSQL:setupSql withParameters:nil];
-        }
+        //migrator closed connection so reopen
+        [self.repository open];
     }
     return self;
 }
