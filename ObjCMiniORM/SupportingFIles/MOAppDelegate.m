@@ -23,7 +23,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
 
-    self.repository = [[MORepository alloc]init];
+    self.repository = [[[MORepository alloc]init]autorelease];
     [self.repository open];
     
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];

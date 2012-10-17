@@ -69,10 +69,10 @@
 }
 
 -(void)loadTableData{
-    self.contacts = [[self.repository
+    self.contacts = [[[self.repository
         query:@"select * from contact order by addedOn desc"
         withParameters:nil
-        forType:[Contact class]] mutableCopy];
+        forType:[Contact class]] mutableCopy]autorelease];
 }
 
 -(NSInteger) numberOfSectionsInTableView:(UITableView*)tableView{
