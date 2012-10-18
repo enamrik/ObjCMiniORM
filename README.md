@@ -45,8 +45,8 @@ Close connection:
 
 If **MODbModelMeta** isn't being used for manual mapping, ObjCMiniORM uses certain conventions for mapping objects. These conventions are:
 
-* The class name much be the same as the table name
-* A primary key is required, must be an integer and must be named <table-name>id
+* The class name must be the same as the table name
+* A primary key is required, must be an integer and must be named [table-name]id
 
 Given the following object:
 
@@ -123,7 +123,9 @@ or updated as follows:
     MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:self.repository andMeta:meta]autorelease];
     [migrator updateDatabaseAndRunScripts:true];
     
-**MODbMigrator** can also run script files. Script files are only run once and are tracked in a database table to make sure they're never run again. Thes script files can be flagged as needing to run before or after the model update. Any object can be a script file if it implements the protocol **IScriptFile**. Script files are added to the **MODbMigrator** using the method `registerScriptFile:(id<IScriptFile>)scriptFile`.
+**MODbMigrator** can also run script files. Script files are only run once and are tracked in a database table to make sure they're never run again. Thes script files can be flagged as needing to run before or after the model update. Any object can be a script file if it implements the protocol **IScriptFile**. 
+
+Script files are added to the **MODbMigrator** using the method `registerScriptFile:(id<IScriptFile>)scriptFile`.
 
 
 
