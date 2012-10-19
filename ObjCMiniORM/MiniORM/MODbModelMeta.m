@@ -265,7 +265,7 @@
 
 -(NSString*)clearPrimaryKey{
    for(NSMutableDictionary *property in [self.currentModel objectForKey:@"properties"]){
-        [self.currentProperty setObject:[NSNumber numberWithBool:false] forKey:@"isKey"];
+        [property setObject:[NSNumber numberWithBool:false] forKey:@"isKey"];
    }
     return nil;
 }
