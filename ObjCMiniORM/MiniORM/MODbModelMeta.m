@@ -264,11 +264,9 @@
 
 
 -(NSString*)clearPrimaryKey{
-    int propertyCount  = [self propertyCount];
-    for(int propertyIndex = 0; propertyIndex<propertyCount;propertyIndex++){
-        [self propertySetCurrentByIndex:propertyIndex];
-        [self propertySetIsKey:false];
-    }
+   for(NSMutableDictionary *property in [self.currentModel objectForKey:@"properties"]){
+        [self.currentProperty setObject:[NSNumber numberWithBool:false] forKey:@"isKey"];
+   }
     return nil;
 }
 
