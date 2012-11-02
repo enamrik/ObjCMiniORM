@@ -15,13 +15,12 @@
     sqlite3 *_database;
 }
 
-@property(readonly)NSString *filePathName;
-
 -(id)init;
 -(id)initWithDBFilePath:(NSString*)pathName;
 -(id)initWithBundleFile:(NSString*)name;
 -(id)initWithBundleFile:name dbFilePath:pathName;
 
+-(NSString*)getFilePathName;
 -(void) mergeModelMeta:(MODbModelMeta*)meta;
 -(BOOL)open;
 -(BOOL)isOpened;

@@ -28,7 +28,6 @@
     [repository open];
     BOOL isOpened = [repository sqliteDatabase] != NULL;
     [repository close];
-    [repository release];
     STAssertTrue(isOpened, @"can open database");
 }
 
@@ -38,7 +37,6 @@
     BOOL wasOpened = [repository sqliteDatabase] != NULL;
     [repository close];
     BOOL isClosed = [repository sqliteDatabase] == NULL;
-    [repository release];
     STAssertTrue(wasOpened && isClosed, @"can close database");
 }
 

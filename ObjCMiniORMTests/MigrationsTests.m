@@ -18,33 +18,35 @@
 - (void)setUp{
     //delete test database
     NSFileManager *fileManager = [NSFileManager defaultManager];
-     MORepository *repository=[[[MORepository alloc]init]autorelease];
-    [fileManager removeItemAtPath:repository.filePathName error:NULL];
+     MORepository *repository=[[MORepository alloc]init];
+    [fileManager removeItemAtPath:[repository getFilePathName] error:NULL];
 }
 
 -(void)testCreateScriptTableIfNotExists{
-    MORepository *repository=[[[MORepository alloc]init]autorelease];
+    MORepository *repository=[[MORepository alloc]init];
     [repository open];
     
-    [[[MODbMigrator alloc]initWithRepo:repository andMeta:nil]autorelease];
-    
+    MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:repository andMeta:nil];
+
      BOOL check =[[repository
-            executeSQLScalar:@"SELECT count(*) FROM sqlite_master WHERE type='table' AND name=?;"
-            withParameters:[NSArray arrayWithObject:[MODbMigrator migrationTableName]]] intValue] > 0;
+        executeSQLScalar:@"SELECT count(*) FROM sqlite_master WHERE type='table' AND name=?;"
+        withParameters:[NSArray arrayWithObject:[MODbMigrator migrationTableName]]] intValue] > 0;
     
      STAssertTrue(check,@"createScriptTableIfNotExists");
+    //get rid of warning
+    STAssertTrue([migrator registeredScriptFiles]!=nil,@"createScriptTableIfNotExists");
 }
 
 -(void)testWillRegisterScriptsAndOrderThem{
-    MORepository *repository=[[[MORepository alloc]init]autorelease];
+    MORepository *repository=[[MORepository alloc]init];
     [repository open];
-    MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:nil]autorelease];
+    MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:repository andMeta:nil];
     
-    id<IScriptFile>script=[[[TestScriptFile alloc]initWithTimestamp:88 andSql:@"sql"] autorelease];
+    id<IScriptFile>script=[[TestScriptFile alloc]initWithTimestamp:88 andSql:@"sql"];
     [migrator registerScriptFile:script];
-    script=[[[TestScriptFile alloc]initWithTimestamp:99 andSql:@"sql"] autorelease];
+    script=[[TestScriptFile alloc]initWithTimestamp:99 andSql:@"sql"];
     [migrator registerScriptFile:script];
-    script=[[[TestScriptFile alloc]initWithTimestamp:100 andSql:@"sql"] autorelease];
+    script=[[TestScriptFile alloc]initWithTimestamp:100 andSql:@"sql"];
     [migrator registerScriptFile:script];
     
     [migrator performSelector:@selector(orderScriptFiles)];
@@ -56,9 +58,9 @@
 }
 
 -(void)testGetAllScriptsThatHaventRun{
-    MORepository *repository=[[[MORepository alloc]init]autorelease];
+    MORepository *repository=[[MORepository alloc]init];
     [repository open];
-    MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:nil]autorelease];
+    MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:repository andMeta:nil];
     
     [migrator performSelector:@selector(checkCreateScriptTable)];
     
@@ -68,11 +70,11 @@
     [repository executeSQL:[NSString stringWithFormat:@"insert into %@(timestamp, runOn) values(99, 99)",
         [MODbMigrator migrationTableName]] withParameters:nil];
     
-    id<IScriptFile>script=[[[TestScriptFile alloc]initWithTimestamp:88 andSql:@"sql"] autorelease];
+    id<IScriptFile>script=[[TestScriptFile alloc]initWithTimestamp:88 andSql:@"sql"];
     [migrator registerScriptFile:script];
-    script=[[[TestScriptFile alloc]initWithTimestamp:99 andSql:@"sql"] autorelease];
+    script=[[TestScriptFile alloc]initWithTimestamp:99 andSql:@"sql"];
     [migrator registerScriptFile:script];
-    script=[[[TestScriptFile alloc]initWithTimestamp:100 andSql:@"sql"] autorelease];
+    script=[[TestScriptFile alloc]initWithTimestamp:100 andSql:@"sql"];
     [migrator registerScriptFile:script];
     
     NSArray* haventRun = [migrator performSelector:@selector(getScriptFilesThatHaventBeenRun)];
@@ -82,9 +84,9 @@
 }
 
 -(void)testWillGetTableNames{
-    MORepository *repository=[[[MORepository alloc]init]autorelease];
+    MORepository *repository=[[MORepository alloc]init];
     [repository open];
-    MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:nil]autorelease];
+    MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:repository andMeta:nil];
     NSArray* tablesSchema = [migrator performSelector:@selector(getTableDbMeta)];
     
     STAssertTrue([tablesSchema count] > 0,@"testWillGetTableNames - has tables");
@@ -96,9 +98,9 @@
 }
 
 -(void)testWillGetColumnDataForTable{
-    MORepository *repository=[[[MORepository alloc]init]autorelease];
+    MORepository *repository=[[MORepository alloc]init];
     [repository open];
-    MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:nil]autorelease];
+    MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:repository andMeta:nil];
     NSArray* columnSchema = [migrator performSelector:@selector(getColumnDbMetaForTable:)
         withObject:[MODbMigrator migrationTableName]];
     
@@ -111,10 +113,10 @@
 }
 
 -(void)testCreateTableForModelIfNotInDb{
-    MODbModelMeta *meta=[[[MODbModelMeta alloc]init]autorelease];
-    MORepository *repository=[[[MORepository alloc]init]autorelease];
+    MODbModelMeta *meta=[[MODbModelMeta alloc]init];
+    MORepository *repository=[[MORepository alloc]init];
     [repository open];
-    MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:meta]autorelease];
+    MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:repository andMeta:meta];
     
     [meta modelAddByName:@"TestTable"];
     [meta propertyAdd:@"TestTableId"];
@@ -133,10 +135,10 @@
 }
 
 -(void)testAddColumnsToExistingTable{
-    MODbModelMeta *meta=[[[MODbModelMeta alloc]init]autorelease];
-    MORepository *repository=[[[MORepository alloc]init]autorelease];
+    MODbModelMeta *meta=[[MODbModelMeta alloc]init];
+    MORepository *repository=[[MORepository alloc]init];
     [repository open];
-    MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:meta]autorelease];
+    MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:repository andMeta:meta];
     
     [repository executeSQL:@"create table MyTable(TestTableId INTEGER PRIMARY KEY)" withParameters:nil];
     
@@ -161,10 +163,10 @@
 }
 
 -(void)testSetupManualBindings{
-    MODbModelMeta *meta=[[[MODbModelMeta alloc]init]autorelease];
-    MORepository *repository=[[[MORepository alloc]init]autorelease];
+    MODbModelMeta *meta=[[MODbModelMeta alloc]init];
+    MORepository *repository=[[MORepository alloc]init];
     [repository open];
-    MODbMigrator *migrator = [[[MODbMigrator alloc]initWithRepo:repository andMeta:meta]autorelease];
+    MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:repository andMeta:meta];
     
     [meta modelAddByName:@"TestTable"];
     [meta modelSetTableName:@"MyTable"];

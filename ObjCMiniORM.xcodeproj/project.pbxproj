@@ -441,6 +441,7 @@
 		B89279DB161C264000091333 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ObjCMiniORM/SupportingFiles/ObjCMiniORM-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/ObjCMiniORM/SupportingFIles/ObjCMiniORM-Info.plist";
@@ -453,6 +454,7 @@
 		B89279DC161C264000091333 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ObjCMiniORM/SupportingFiles/ObjCMiniORM-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/ObjCMiniORM/SupportingFIles/ObjCMiniORM-Info.plist";
@@ -466,6 +468,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ObjCMiniORM.app/ObjCMiniORM";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
@@ -483,6 +486,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ObjCMiniORM.app/ObjCMiniORM";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",

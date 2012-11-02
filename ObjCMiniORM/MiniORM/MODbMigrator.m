@@ -27,10 +27,6 @@
     }
     return self;
 }
--(void)dealloc{
-    self.fileSql=nil;
-    [super dealloc];
-}
 -(double)timestamp{return self.fileTimestamp;}
 -(NSString*)sql{return self.fileSql;}
 -(BOOL)runBeforeModelUpdate{ return false;}
@@ -47,15 +43,6 @@
 @synthesize repository,scriptFiles,runBeforeScripts,modelScripts,runAfterScripts,
 modelMeta;
 
--(void)dealloc{
-    self.runAfterScripts=nil;
-    self.modelScripts=nil;
-    self.runBeforeScripts=nil;
-    self.modelMeta=nil;
-    self.scriptFiles=nil;
-    self.repository=nil;
-    [super dealloc];
-}
 
 -(id)initWithRepo:(MORepository*)repo andMeta:(MODbModelMeta*)meta{
     self=[super init];
@@ -123,7 +110,6 @@ modelMeta;
             MOScriptFile *file = [[MOScriptFile alloc]init];
             file.fileSql = [self generateCreateTableScriptForMeta];
             [sqlScripts addObject:file];
-            [file release];
         }
         else{
             NSArray*columns = [self getColumnDbMetaForTable:[self.modelMeta modelGetTableName]];
@@ -142,7 +128,6 @@ modelMeta;
                     MOScriptFile *file = [[MOScriptFile alloc]init];
                     file.fileSql = alterSql;
                     [sqlScripts addObject:file];
-                    [file release];
                 }
             }
         }
@@ -207,7 +192,6 @@ modelMeta;
     sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO];
     NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     [self.scriptFiles sortUsingDescriptors:sortDescriptors];
-    [sortDescriptor release];
 }
 
 -(void)registerScriptFile:(id<IScriptFile>)scriptFile{

@@ -16,26 +16,17 @@
 @property(strong)MODbModelMeta* modelMeta;
 @property(copy)NSString* bundleFile;
 @property int busyRetryTimeout;
+@property(strong)NSString *filePathName;
 @end
 
 @implementation MORepository
 
 //====================================================================
 //====================================================================
--(void)dealloc{
-    self.modelMeta=nil;
-    self.bundleFile=nil;
-    [_filePathName release];
-    [super dealloc];
-}
-
-//====================================================================
-//====================================================================
 -(id)init{
     self=[super init];
     if (self) {
-        _filePathName = [MORepository defaultDatabasePath];
-        [_filePathName retain];
+        self.filePathName = [MORepository defaultDatabasePath];
         [self initSetup];
     }
     return self;
@@ -46,8 +37,7 @@
 -(id)initWithDBFilePath:(NSString*)pathName{
     self=[super init];
     if (self) {
-        _filePathName = pathName;
-        [_filePathName retain];
+        self.filePathName = pathName;
         [self initSetup];
     }
     return self;
@@ -59,9 +49,8 @@
     self=[super init];
     if (self) {
         self.bundleFile = name;
-        _filePathName = [[[MORepository defaultDatabasePath]stringByDeletingLastPathComponent]
+        self.filePathName = [[[MORepository defaultDatabasePath]stringByDeletingLastPathComponent]
             stringByAppendingPathComponent:self.bundleFile];
-        [_filePathName retain];
         [self initSetup];
     }
     return self;
@@ -73,8 +62,7 @@
     self=[super init];
     if (self) {
         self.bundleFile = name;
-        _filePathName = pathName;
-        [_filePathName retain];
+        self.filePathName = pathName;
         [self initSetup];
     }
     return self;
@@ -84,13 +72,19 @@
 //====================================================================
 -(void)initSetup{
     self.busyRetryTimeout =10;
-    self.modelMeta = [[[MODbModelMeta alloc]init]autorelease];
+    self.modelMeta = [[MODbModelMeta alloc]init];
 }
 
 //====================================================================
 //====================================================================
 -(void) mergeModelMeta:(MODbModelMeta*)meta{
     [self.modelMeta merge:meta];
+}
+
+//====================================================================
+//====================================================================
+-(NSString*)getFilePathName{
+    return self.filePathName;
 }
 
 //====================================================================
@@ -268,8 +262,6 @@
     
     [self executeSQL:sql withParameters:paramsArray];
 
-    [sql release];
-    [paramsArray release];
 }
 
 //====================================================================
@@ -296,7 +288,6 @@
     
     [self executeSQL:sql withParameters:[NSArray arrayWithObject:pkValue]];
     
-    [sql release];
 }
 
 //====================================================================
@@ -362,16 +353,13 @@
         [object setValue:[NSNumber numberWithInt:newId] forKey:pkName];
     }
     
-    [sql release];
-    [paramsSql release];
-    [paramsArray release];
 }
 
 //====================================================================
 //====================================================================
 -(NSArray*)queryColumn:(NSString*) sql  withParameters:(NSArray *)params{
     
-    NSMutableArray *records=[[[NSMutableArray alloc]init]autorelease];
+    NSMutableArray *records=[[NSMutableArray alloc]init];
     sqlite3_stmt* stat=[self executeSQLReader:sql withParameters:params];
 	
 	if (stat!=nil) {
@@ -418,7 +406,7 @@
         NSLog(@"query: %@, withParameters:%@, forType:%@", sql,params,  NSStringFromClass(type));
     #endif    
     
-    NSMutableArray *records=[[[NSMutableArray alloc]init]autorelease];
+    NSMutableArray *records=[[NSMutableArray alloc]init];
     sqlite3_stmt* stat=[self executeSQLReader:sql withParameters:params];
 	
     [self.modelMeta modelAddByType:type];
@@ -441,7 +429,7 @@
         NSLog(@"query: %@, withParameters:%@", sql,params);
     #endif
         
-    NSMutableArray *records=[[[NSMutableArray alloc]init]autorelease];
+    NSMutableArray *records=[[NSMutableArray alloc]init];
     sqlite3_stmt* stat=[self executeSQLReader:sql withParameters:params];
 	
 	if (stat!=nil) {
@@ -465,7 +453,6 @@
                 }
             }
             [records addObject:record];
-            [record release];
 		}
 	}
 	
@@ -676,7 +663,7 @@
 -(id)mapRecord:(sqlite3_stmt*)stat andColumns:(NSArray*)columns forType:(Class)type{
     
     int columnIndex;
-    id object = [[[type alloc] init]autorelease];
+    id object = [[type alloc] init];
     
     int propertyCount  = [self.modelMeta propertyCount];
     

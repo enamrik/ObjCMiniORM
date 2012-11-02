@@ -13,7 +13,7 @@
 @implementation ModelMetaTests
 
 -(void)testWillAddModelByName{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     
     STAssertTrue([meta modelCount]==1, @"WillAddModelByName -  has model");
@@ -22,7 +22,7 @@
 }
 
 -(void)testWillAddModelByType{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByType:TestModel.class];
     
     STAssertTrue([meta modelCount]==1, @"WillAddModelByType -  has model");
@@ -31,7 +31,7 @@
 }
 
 -(void)testWillSetCurrentModelByName{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByType:TestModel.class];
     [meta modelAddByName:@"MyModel"];
     [meta modelSetCurrentByName:@"TestModel"];
@@ -39,20 +39,20 @@
 }
 
 -(void)testWillSetModelProperties{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     [meta modelSetTableName:@"ATable"];
     STAssertTrue([[meta modelGetTableName]isEqualToString:@"ATable"], @"WillSetModelProperties");
 }
 
 -(void)testWillSetModelPropertyDefaults{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     STAssertTrue([[meta modelGetTableName]isEqualToString:@"MyModel"], @"WillSetModelProperties");
 }
 
 -(void)testWillAddProperty{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     [meta propertyAdd:@"MyModelId"];
     [meta propertySetIsKey:true];
@@ -66,7 +66,7 @@
 }
 
 -(void)testWillSetCurrentPropertyByName{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     [meta propertyAdd:@"MyModelId"];
     [meta propertySetIsKey:true];
@@ -77,7 +77,7 @@
 }
 
 -(void)testWillSetPropertyProperties{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     [meta propertyAdd:@"MyModelId"];
     [meta propertySetIsKey:true];
@@ -88,7 +88,7 @@
 }
 
 -(void)testWillSetPropertyPropertiesDefaults{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     [meta propertyAdd:@"MyModelId"];
 
@@ -97,17 +97,17 @@
 }
 
 -(void)testWillAutoGenPropertiesIfModelAddedByType{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByType:TestModel.class];
     [meta propertySetCurrentByName:@"fullName"];
     STAssertTrue([[meta propertyGetName]isEqualToString:@"fullName"], @"WillSetCurrentModelByName");
 }
 
 -(void)testWillMergeModels{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     
-    MODbModelMeta *meta2 = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta2 = [[MODbModelMeta alloc]init];
     [meta2 modelAddByName:@"MyModel2"];
     
     [meta merge:meta2];
@@ -118,11 +118,11 @@
 }
 
 -(void)testWillPreserveExistingModelsOnMerge{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     [meta modelSetTableName:@"MyTable"];
     
-    MODbModelMeta *meta2 = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta2 = [[MODbModelMeta alloc]init];
     [meta2 modelAddByName:@"MyModel"];
     [meta2 modelSetTableName:@"MyTableDifferentName"];
     
@@ -133,11 +133,11 @@
 }
 
 -(void)testWillMergeProperties{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     [meta propertyAdd:@"ModelName"];
     
-    MODbModelMeta *meta2 = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta2 = [[MODbModelMeta alloc]init];
     [meta2 modelAddByName:@"MyModel"];
     [meta2 propertyAdd:@"MyModelId"];
     
@@ -149,11 +149,11 @@
 }
 
 -(void)testWillPreserveExistingPropertiesOnMerge{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     [meta propertyAdd:@"ModelName"];
     
-    MODbModelMeta *meta2 = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta2 = [[MODbModelMeta alloc]init];
     [meta2 modelAddByName:@"MyModel"];
     [meta2 propertyAdd:@"ModelName"];
     
@@ -164,7 +164,7 @@
 }
 
 -(void)testWillGetPrimaryKeyName{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     [meta propertyAdd:@"Name"];
     [meta propertyAdd:@"Id"];
@@ -174,7 +174,7 @@
 }
 
 -(void)testPrimaryKeyIsMutuallyExclusive{
-    MODbModelMeta *meta = [[[MODbModelMeta alloc]init]autorelease];
+    MODbModelMeta *meta = [[MODbModelMeta alloc]init];
     [meta modelAddByName:@"MyModel"];
     [meta propertyAdd:@"Name"];
     [meta propertyAdd:@"Id"];

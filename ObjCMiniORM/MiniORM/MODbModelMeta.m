@@ -18,12 +18,6 @@
 
 @synthesize meta,currentModel,currentProperty;
 
--(void)dealloc{
-    self.currentModel=nil;
-    self.meta=nil;
-    self.currentProperty=nil;
-    [super dealloc];
-}
 
 -(id)init{
     self=[super init];

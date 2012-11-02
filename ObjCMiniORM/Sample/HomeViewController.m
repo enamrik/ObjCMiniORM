@@ -22,14 +22,6 @@
 
 @implementation HomeViewController
 
--(void)dealloc{
-    self.contacts=nil;
-    self.btnAddContact=nil;
-    self.tblContacts=nil;
-    self.txtContactName=nil;
-    self.repository=nil;
-    [super dealloc];
-}
 
 - (id)initWithRepository:(MORepository*)repo{
     self = [super initWithNibName:@"HomeViewController" bundle:nil];
@@ -42,8 +34,6 @@
         [meta modelAddByType:Contact.class];
         MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:self.repository andMeta:meta];
         [migrator updateDatabaseAndRunScripts:true];
-        [meta release];
-        [migrator release];
         
         //migrator closed connection so reopen
         [self.repository open];
@@ -62,17 +52,16 @@
     contact.fullName = self.txtContactName.text;
     contact.addedOn = [NSDate date];
     [self.repository commit:contact];
-    [contact release];
     
     [self loadTableData];
     [self.tblContacts reloadData];
 }
 
 -(void)loadTableData{
-    self.contacts = [[[self.repository
+    self.contacts = [[self.repository
         query:@"select * from contact order by addedOn desc"
         withParameters:nil
-        forType:[Contact class]] mutableCopy]autorelease];
+        forType:[Contact class]] mutableCopy];
 }
 
 -(NSInteger) numberOfSectionsInTableView:(UITableView*)tableView{
@@ -94,8 +83,8 @@
      
     myCell=(UITableViewCell*)[tableView dequeueReusableCellWithIdentifier:defaultIdentifier];
     if (myCell==nil) {
-        myCell=[[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
-            reuseIdentifier:defaultIdentifier]autorelease];
+        myCell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
+            reuseIdentifier:defaultIdentifier];
         [myCell setAccessoryType:UITableViewCellAccessoryNone];
     }
 

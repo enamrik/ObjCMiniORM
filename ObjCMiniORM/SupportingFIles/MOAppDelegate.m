@@ -16,21 +16,16 @@
 
 @implementation MOAppDelegate
 
-- (void)dealloc{
-    [_window release];
-    [super dealloc];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
 
-    self.repository = [[[MORepository alloc]init]autorelease];
+    self.repository = [[MORepository alloc]init];
     [self.repository open];
     
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     HomeViewController *controller = [[HomeViewController alloc]initWithRepository:self.repository];
     self.window.rootViewController =controller;
-    [controller release];
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

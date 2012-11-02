@@ -17,10 +17,6 @@
 
 @implementation TestScriptFile
 
--(void)dealloc{
-    [_sql release];
-    [super dealloc];
-}
 
 -(id)initWithTimestamp:(double)timestamp andSql:(NSString*)sql{
     self=[super init];

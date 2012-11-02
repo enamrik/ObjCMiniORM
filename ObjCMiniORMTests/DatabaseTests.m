@@ -23,7 +23,7 @@ static MORepository* _repository = nil;
 + (void)setUp{
     //delete test database
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager removeItemAtPath:_repository.filePathName error:NULL];
+    [fileManager removeItemAtPath:[_repository getFilePathName] error:NULL];
     
     _repository=[[MORepository alloc]init];
     [_repository open];
@@ -34,12 +34,11 @@ static MORepository* _repository = nil;
 
 +(void)tearDown{
     [_repository close];
-    [_repository release];
 }
 
 - (void)setUp{
     [super setUp];
-    self.modelMeta = [[[MODbModelMeta alloc]init]autorelease];
+    self.modelMeta = [[MODbModelMeta alloc]init];
     [self.modelMeta modelAddByType:TestModel.class];
     [self.modelMeta propertySetCurrentByName:@"readonlyProperty"];
     [self.modelMeta propertySetIsReadOnly:true];
@@ -55,7 +54,7 @@ static MORepository* _repository = nil;
 }
 
 -(void)testCommitPropertyTypes{
-    TestModel *model = [[[TestModel alloc]init]autorelease];
+    TestModel *model = [[TestModel alloc]init];
     model.fullName=@"theModel";
     model.modelDate = [NSDate dateWithTimeIntervalSince1970:1000];
     [_repository insert:model];
@@ -72,7 +71,7 @@ static MORepository* _repository = nil;
 }
 
 -(void)testWillInsertObject{
-    TestModel *model = [[[TestModel alloc]init]autorelease];
+    TestModel *model = [[TestModel alloc]init];
     model.fullName=@"theModel";
     [_repository insert:model];
 
@@ -87,7 +86,7 @@ static MORepository* _repository = nil;
 }
 
 -(void)testWillUpdateObject{
-    TestModel *model = [[[TestModel alloc]init]autorelease];
+    TestModel *model = [[TestModel alloc]init];
     model.fullName=@"theModelName";
     [_repository insert:model];
  
@@ -108,7 +107,7 @@ static MORepository* _repository = nil;
 }
 
 -(void)testWillDeleteObject{
-    TestModel *model = [[[TestModel alloc]init]autorelease];
+    TestModel *model = [[TestModel alloc]init];
     model.fullName=@"theModelName";
     [_repository insert:model];
  
@@ -128,7 +127,7 @@ static MORepository* _repository = nil;
 }
 
 -(void)testWillCommitUpdateObject{
-    TestModel *model = [[[TestModel alloc]init]autorelease];
+    TestModel *model = [[TestModel alloc]init];
     model.fullName=@"theModelName";
     [_repository insert:model];
  
@@ -151,7 +150,7 @@ static MORepository* _repository = nil;
 }
 
 -(void)testWillCommitInsertObject{
-    TestModel *model = [[[TestModel alloc]init]autorelease];
+    TestModel *model = [[TestModel alloc]init];
     model.fullName=@"theModelName";
     [_repository commit:model];
  
@@ -164,7 +163,7 @@ static MORepository* _repository = nil;
 }
 
 -(void)testWillLoadReadOnlyProperties{
-    TestModel *model = [[[TestModel alloc]init]autorelease];
+    TestModel *model = [[TestModel alloc]init];
     model.fullName=@"theModelName";
     [_repository commit:model];
  
@@ -177,7 +176,7 @@ static MORepository* _repository = nil;
 }
 
 -(void)testWillIgnoreProperties{
-    TestModel *model = [[[TestModel alloc]init]autorelease];
+    TestModel *model = [[TestModel alloc]init];
     model.fullName=@"theModelName";
     model.ignoreProperty =@"5";
     [_repository commit:model];
@@ -191,7 +190,7 @@ static MORepository* _repository = nil;
 }
 
 -(void)testWillWorkWithInternalModelMeta{
-    TestModel2 *model = [[[TestModel2 alloc]init]autorelease];
+    TestModel2 *model = [[TestModel2 alloc]init];
     model.fullName=@"theModelName";
 
     MORepository * repository = [[MORepository alloc]init];
@@ -211,7 +210,6 @@ static MORepository* _repository = nil;
     
     [repository rollback];
     [repository close];
-    [repository release];
     
     STAssertTrue(queryModel != nil, @"WillWorkWithInternalModelMeta");
 }

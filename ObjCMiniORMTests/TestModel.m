@@ -10,9 +10,4 @@
 
 @implementation TestModel
 
--(void)dealloc{
-    self.fullName=nil;
-    self.modelDate=nil;
-    [super dealloc];
-}
 @end
