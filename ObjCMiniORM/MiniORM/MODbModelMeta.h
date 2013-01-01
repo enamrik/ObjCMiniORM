@@ -16,6 +16,7 @@
 
 //if the model already exists, it will be left alone and made current
 -(void)modelAddByType:(Class)modelType;
+-(void)modelAddByType:(Class)modelType withBaseClass:(BOOL)withbaseClass;
 
 -(NSString*)modelGetName;
 -(BOOL)modelSetCurrentByName:(NSString*)modelName;

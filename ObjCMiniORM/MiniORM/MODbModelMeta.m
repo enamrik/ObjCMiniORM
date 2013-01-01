@@ -27,7 +27,7 @@
     return self;
 }
 
--(void)modelAddByName:(NSString*)modelName{
+-(void)modelAddByName:(NSString*)modelName {
     NSMutableDictionary* model = [self findModel:modelName];
     if(model==nil){
         model = [NSMutableDictionary dictionary];
@@ -39,10 +39,18 @@
     self.currentModel = model;
 }
 
--(void)modelAddByType:(Class)modelType{
+-(void)modelAddByType:(Class)modelType {
+    [self modelAddByType:modelType withBaseClass:NO];
+}
+
+-(void)modelAddByType:(Class)modelType withBaseClass:(BOOL)withbaseClass{
     NSString* modelName =[NSString stringWithCString:class_getName(modelType)
            encoding:NSUTF8StringEncoding];
     [self modelAddByName:modelName];
+    
+    if ( withbaseClass )
+        [self addPropertiesForClass:[modelType superclass]];
+    
     [self addPropertiesForClass:modelType];
 }
 -(NSString*)modelGetName{
