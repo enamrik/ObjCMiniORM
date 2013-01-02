@@ -43,9 +43,7 @@ modelMeta;
 
 -(BOOL)updateDatabaseAndRunScripts:(BOOL)runScripts{
     
-    if([self.repository isOpened] == false){
-        [NSException raise:@"OpenedRepositoryRequired" format:@"Migrator requires an opened repository"];
-    }
+   [self.repository open];
     
     NSArray* scriptsToRun = [self getScriptFilesThatHaventBeenRun];
     
