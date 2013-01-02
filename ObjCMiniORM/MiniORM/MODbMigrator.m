@@ -9,28 +9,7 @@
 #import "MODbMigrator.h"
 #import "MORepository.h"
 #import "MODbModelMeta.h"
-
-
-@interface MOScriptFile : NSObject<IScriptFile>
-@property double fileTimestamp;
-@property (copy) NSString*fileSql;
--(double)timestamp;
--(NSString*)sql;
--(BOOL)runBeforeModelUpdate;
-@end
-@implementation MOScriptFile
-@synthesize fileTimestamp,fileSql;
--(id)init{
-    self=[super init];
-    if (self) {
-        self.fileTimestamp = [[NSDate date] timeIntervalSince1970];
-    }
-    return self;
-}
--(double)timestamp{return self.fileTimestamp;}
--(NSString*)sql{return self.fileSql;}
--(BOOL)runBeforeModelUpdate{ return false;}
-@end
+#import "MOScriptFile.h"
 
 @interface MODbMigrator()
 @property(strong)MORepository*repository;
@@ -42,7 +21,6 @@
 
 @synthesize repository,scriptFiles,runBeforeScripts,modelScripts,runAfterScripts,
 modelMeta;
-
 
 -(id)initWithRepo:(MORepository*)repo andMeta:(MODbModelMeta*)meta{
     self=[super init];
@@ -108,7 +86,7 @@ modelMeta;
         NSArray *results = [tables filteredArrayUsingPredicate:predicate];
         if([results count] == 0){
             MOScriptFile *file = [[MOScriptFile alloc]init];
-            file.fileSql = [self generateCreateTableScriptForMeta];
+            file.sqlText = [self generateCreateTableScriptForMeta];
             [sqlScripts addObject:file];
         }
         else{
@@ -129,7 +107,7 @@ modelMeta;
                     NSString*alterSql=[NSString stringWithFormat:@"alter table %@ add column %@ %@",
                         [self.modelMeta modelGetTableName],[self.modelMeta propertyGetColumnName],sqliteType];
                     MOScriptFile *file = [[MOScriptFile alloc]init];
-                    file.fileSql = alterSql;
+                    file.sqlText = alterSql;
                     [sqlScripts addObject:file];
                 }
             }

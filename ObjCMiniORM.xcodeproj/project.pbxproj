@@ -15,6 +15,7 @@
 		B82EB5B2161C352300D7FB19 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B82EB5B0161C352300D7FB19 /* HomeViewController.m */; };
 		B82EB5B3161C352300D7FB19 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B82EB5B1161C352300D7FB19 /* HomeViewController.xib */; };
 		B82EB5B6161C356D00D7FB19 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = B82EB5B5161C356D00D7FB19 /* Contact.m */; };
+		B861C1D31693ECE20042A824 /* MOScriptFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B861C1D21693ECE20042A824 /* MOScriptFile.m */; };
 		B89279AC161C263F00091333 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B89279AB161C263F00091333 /* UIKit.framework */; };
 		B89279AE161C263F00091333 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B89279AD161C263F00091333 /* Foundation.framework */; };
 		B89279B0161C263F00091333 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B89279AF161C263F00091333 /* CoreGraphics.framework */; };
@@ -60,6 +61,8 @@
 		B82EB5B1161C352300D7FB19 /* HomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
 		B82EB5B4161C356D00D7FB19 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		B82EB5B5161C356D00D7FB19 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		B861C1D11693ECE20042A824 /* MOScriptFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOScriptFile.h; sourceTree = "<group>"; };
+		B861C1D21693ECE20042A824 /* MOScriptFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOScriptFile.m; sourceTree = "<group>"; };
 		B89279A7161C263F00091333 /* ObjCMiniORM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjCMiniORM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B89279AB161C263F00091333 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B89279AD161C263F00091333 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -209,6 +212,8 @@
 				B8D271DC162020B500643555 /* MODbMigrator.m */,
 				B8283BD0162642D700A54557 /* MODbModelMeta.h */,
 				B8283BD1162642D700A54557 /* MODbModelMeta.m */,
+				B861C1D11693ECE20042A824 /* MOScriptFile.h */,
+				B861C1D21693ECE20042A824 /* MOScriptFile.m */,
 			);
 			path = MiniORM;
 			sourceTree = "<group>";
@@ -350,6 +355,7 @@
 				B82EB5B6161C356D00D7FB19 /* Contact.m in Sources */,
 				B8D271DD162020B500643555 /* MODbMigrator.m in Sources */,
 				B8283BD2162642D700A54557 /* MODbModelMeta.m in Sources */,
+				B861C1D31693ECE20042A824 /* MOScriptFile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
