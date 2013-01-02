@@ -228,7 +228,8 @@ static MORepository* _repository = nil;
     model.fullName=@"theModelName";
     [_repository commit:model];
  
-    TestModel* queryModel = [[_repository queryForType:TestModel.class whereClause:@"testModelId=1"] objectAtIndex:0];
+    TestModel* queryModel = [[_repository queryForType:TestModel.class whereClause:@"testModelId=?"
+    withParameters:[NSArray arrayWithObject:[NSNumber numberWithInt:1]]] objectAtIndex:0];
     STAssertTrue([queryModel.fullName isEqualToString:@"theModelName"], @"Will Query For Types With Where Clause");
 }
 

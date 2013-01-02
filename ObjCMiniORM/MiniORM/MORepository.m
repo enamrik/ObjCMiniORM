@@ -450,13 +450,14 @@
 
 //====================================================================
 //====================================================================
--(NSArray*)queryForType:(Class)type whereClause:(NSString*)where{
+-(NSArray*)queryForType:(Class)type whereClause:(NSString*)where
+withParameters:(NSArray *)params{
 
     [self.modelMeta modelAddByType:type];
     NSString* tableName = [self.modelMeta modelGetTableName];
     return [self query:[NSString stringWithFormat:
         @"select * from %@ where %@", tableName, where]
-        withParameters:nil forType:type];
+        withParameters:params forType:type];
 }
 
 //====================================================================
