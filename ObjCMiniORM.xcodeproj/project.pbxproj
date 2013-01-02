@@ -81,7 +81,7 @@
 		B89279ED161C293A00091333 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		B89279F3161C29AE00091333 /* MORepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MORepository.h; sourceTree = "<group>"; };
 		B89279F4161C29AE00091333 /* MORepository.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MORepository.m; sourceTree = "<group>"; };
-		B8D271BA161F039600643555 /* test.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.db; path = ../../ObjCMiniORMTests/test.db; sourceTree = "<group>"; };
+		B8D271BA161F039600643555 /* test.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.db; sourceTree = "<group>"; };
 		B8D271D71620048500643555 /* MigrationsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MigrationsTests.h; sourceTree = "<group>"; };
 		B8D271D81620048500643555 /* MigrationsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MigrationsTests.m; sourceTree = "<group>"; };
 		B8D271DB162020B500643555 /* MODbMigrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODbMigrator.h; sourceTree = "<group>"; };
@@ -174,6 +174,7 @@
 		B89279CF161C264000091333 /* ObjCMiniORMTests */ = {
 			isa = PBXGroup;
 			children = (
+				B8D271BA161F039600643555 /* test.db */,
 				B89279D5161C264000091333 /* DatabaseConnectTests.h */,
 				B89279D6161C264000091333 /* DatabaseConnectTests.m */,
 				B8EB31B3161E79B300B6389F /* DatabaseTests.h */,
@@ -205,7 +206,6 @@
 		B89279E0161C26FB00091333 /* MiniORM */ = {
 			isa = PBXGroup;
 			children = (
-				B8D271BA161F039600643555 /* test.db */,
 				B89279F3161C29AE00091333 /* MORepository.h */,
 				B89279F4161C29AE00091333 /* MORepository.m */,
 				B8D271DB162020B500643555 /* MODbMigrator.h */,
