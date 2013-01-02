@@ -73,6 +73,7 @@
 -(void)initSetup{
     self.busyRetryTimeout =10;
     self.modelMeta = [[MODbModelMeta alloc]init];
+    _database = NULL;
 }
 
 //====================================================================
