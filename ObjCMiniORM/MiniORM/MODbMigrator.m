@@ -27,7 +27,6 @@ modelMeta;
     if (self) {
         self.modelMeta=meta;
         self.repository=repo;
-        [self checkCreateScriptTable];
         self.scriptFiles = [NSMutableArray array];
     }
     return self;
@@ -42,8 +41,8 @@ modelMeta;
 }
 
 -(BOOL)updateDatabaseAndRunScripts:(BOOL)runScripts{
-    
-   [self.repository open];
+    [self.repository open];
+    [self checkCreateScriptTable];
     
     NSArray* scriptsToRun = [self getScriptFilesThatHaventBeenRun];
     
