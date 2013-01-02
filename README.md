@@ -9,12 +9,14 @@ To get started, add the **libsqlite3.0.dylib** framework to your project. Then c
 * MORepository.h
 * MORepository.m
 * MODbModelMeta.h
-* MODbModelMeta.h
+* MODbModelMeta.m
 
 To use the migration feature, also add the following files to your project:
 
 * MODbMigrator.h
 * MODbMigrator.m
+* MOScriptFile.h
+* MOScriptFile.m
 
 ###Connecting to a Database
 
