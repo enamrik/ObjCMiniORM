@@ -14,10 +14,26 @@
     self=[super init];
     if (self) {
         self.scriptTimestamp = [[NSDate date] timeIntervalSince1970];
+        self.sqlText = [NSMutableArray array];
     }
     return self;
 }
+
+-(id)initWithTimestamp:(int)tm andSql:(NSString*)sql{
+    self=[super init];
+    if (self) {
+        self.scriptTimestamp = tm;
+        self.sqlText = [NSMutableArray array];
+        [self.sqlText addObject:sql];
+    }
+    return self;
+}
+
+-(void)addStatement:(NSString*)sql{
+    [self.sqlText addObject:sql];
+}
+
 -(double)timestamp{return self.scriptTimestamp;}
--(NSString*)sql{return self.sqlText;}
+-(NSMutableArray*)sqlStatements{return self.sqlText;}
 -(BOOL)runBeforeModelUpdate{ return false;}
 @end

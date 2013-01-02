@@ -9,7 +9,7 @@
 #import "MigrationsTests.h"
 #import "MODbMigrator.h"
 #import "MORepository.h"
-#import "TestScriptFile.h"
+#import "MOScriptFile.h"
 #import "MODbModelMeta.h"
 #import "TestModel.h"
 
@@ -42,11 +42,11 @@
     [repository open];
     MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:repository andMeta:nil];
     
-    id<IScriptFile>script=[[TestScriptFile alloc]initWithTimestamp:88 andSql:@"sql"];
+    id<IScriptFile>script=[[MOScriptFile alloc]initWithTimestamp:88 andSql:@"sql"];
     [migrator registerScriptFile:script];
-    script=[[TestScriptFile alloc]initWithTimestamp:99 andSql:@"sql"];
+    script=[[MOScriptFile alloc]initWithTimestamp:99 andSql:@"sql"];
     [migrator registerScriptFile:script];
-    script=[[TestScriptFile alloc]initWithTimestamp:100 andSql:@"sql"];
+    script=[[MOScriptFile alloc]initWithTimestamp:100 andSql:@"sql"];
     [migrator registerScriptFile:script];
     
     [migrator performSelector:@selector(orderScriptFiles)];
@@ -70,11 +70,11 @@
     [repository executeSQL:[NSString stringWithFormat:@"insert into %@(timestamp, runOn) values(99, 99)",
         [MODbMigrator migrationTableName]] withParameters:nil];
     
-    id<IScriptFile>script=[[TestScriptFile alloc]initWithTimestamp:88 andSql:@"sql"];
+    id<IScriptFile>script=[[MOScriptFile alloc]initWithTimestamp:88 andSql:@"sql"];
     [migrator registerScriptFile:script];
-    script=[[TestScriptFile alloc]initWithTimestamp:99 andSql:@"sql"];
+    script=[[MOScriptFile alloc]initWithTimestamp:99 andSql:@"sql"];
     [migrator registerScriptFile:script];
-    script=[[TestScriptFile alloc]initWithTimestamp:100 andSql:@"sql"];
+    script=[[MOScriptFile alloc]initWithTimestamp:100 andSql:@"sql"];
     [migrator registerScriptFile:script];
     
     NSArray* haventRun = [migrator performSelector:@selector(getScriptFilesThatHaventBeenRun)];

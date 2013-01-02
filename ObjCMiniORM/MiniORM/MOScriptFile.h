@@ -11,8 +11,10 @@
 
 @interface MOScriptFile : NSObject<IScriptFile>
 @property double scriptTimestamp;
-@property (copy) NSString*sqlText;
+@property (strong) NSMutableArray*sqlText;
+-(id)initWithTimestamp:(int)tm andSql:(NSString*)sql;
 -(double)timestamp;
--(NSString*)sql;
+-(NSMutableArray*)sqlStatements;
 -(BOOL)runBeforeModelUpdate;
+-(void)addStatement:(NSString*)sql;
 @end

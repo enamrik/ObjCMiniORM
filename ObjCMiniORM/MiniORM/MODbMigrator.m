@@ -84,7 +84,7 @@ modelMeta;
         NSArray *results = [tables filteredArrayUsingPredicate:predicate];
         if([results count] == 0){
             MOScriptFile *file = [[MOScriptFile alloc]init];
-            file.sqlText = [self generateCreateTableScriptForMeta];
+            [file addStatement:[self generateCreateTableScriptForMeta]];
             [sqlScripts addObject:file];
         }
         else{
@@ -105,7 +105,7 @@ modelMeta;
                     NSString*alterSql=[NSString stringWithFormat:@"alter table %@ add column %@ %@",
                         [self.modelMeta modelGetTableName],[self.modelMeta propertyGetColumnName],sqliteType];
                     MOScriptFile *file = [[MOScriptFile alloc]init];
-                    file.sqlText = alterSql;
+                    [file addStatement:alterSql];
                     [sqlScripts addObject:file];
                 }
             }
@@ -152,19 +152,19 @@ modelMeta;
 
 -(BOOL)executeScripts:(NSArray*)scripts{
     for(id<IScriptFile> script in scripts){
-        int rowsAffected = [self.repository executeSQL:[script sql] withParameters:nil];
-        if(rowsAffected == -1){
-            return false;
+        for (NSString *sql in [script sqlStatements]) {
+            int rowsAffected = [self.repository executeSQL:sql withParameters:nil];
+             if(rowsAffected == -1){
+                return false;
+             }
         }
-        else{
-            [self.repository executeSQL:
-                    [NSString stringWithFormat:@"insert into %@(timestamp,runOn) values(?,?)",
-                    [MODbMigrator migrationTableName]]
-                withParameters:[NSArray arrayWithObjects:
-                    [NSNumber numberWithDouble:[script timestamp]],
-                    [NSDate date], nil]];
-        }
-        NSLog(@"migration: %@",[script sql]);
+        [self.repository executeSQL:
+            [NSString stringWithFormat:@"insert into %@(timestamp,runOn) values(?,?)",
+            [MODbMigrator migrationTableName]]
+            withParameters:[NSArray arrayWithObjects:
+            [NSNumber numberWithDouble:[script timestamp]],
+            [NSDate date], nil]];
+        NSLog(@"migration: %@",[script sqlStatements]);
     }
     return true;
 }

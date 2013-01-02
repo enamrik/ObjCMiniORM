@@ -11,7 +11,7 @@
 
 @protocol IScriptFile <NSObject>
 -(double)timestamp;
--(NSString*)sql;
+-(NSMutableArray*)sqlStatements;
 -(BOOL)runBeforeModelUpdate;
 @end
 

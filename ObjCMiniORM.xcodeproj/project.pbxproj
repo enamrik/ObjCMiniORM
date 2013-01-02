@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		B8267F30162F48B00069C6ED /* TestModel2.m in Sources */ = {isa = PBXBuildFile; fileRef = B8267F2F162F48B00069C6ED /* TestModel2.m */; };
-		B8283BCE1626095500A54557 /* TestScriptFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B8283BCD1626095500A54557 /* TestScriptFile.m */; };
 		B8283BD2162642D700A54557 /* MODbModelMeta.m in Sources */ = {isa = PBXBuildFile; fileRef = B8283BD1162642D700A54557 /* MODbModelMeta.m */; };
 		B8283BD51626430900A54557 /* ModelMetaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B8283BD41626430900A54557 /* ModelMetaTests.m */; };
 		B82EB5AC161C340E00D7FB19 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B82EB5AB161C340E00D7FB19 /* libsqlite3.0.dylib */; };
@@ -49,8 +48,6 @@
 /* Begin PBXFileReference section */
 		B8267F2E162F48B00069C6ED /* TestModel2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestModel2.h; sourceTree = "<group>"; };
 		B8267F2F162F48B00069C6ED /* TestModel2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestModel2.m; sourceTree = "<group>"; };
-		B8283BCC1626095500A54557 /* TestScriptFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestScriptFile.h; sourceTree = "<group>"; };
-		B8283BCD1626095500A54557 /* TestScriptFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestScriptFile.m; sourceTree = "<group>"; };
 		B8283BD0162642D700A54557 /* MODbModelMeta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODbModelMeta.h; sourceTree = "<group>"; };
 		B8283BD1162642D700A54557 /* MODbModelMeta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODbModelMeta.m; sourceTree = "<group>"; };
 		B8283BD31626430900A54557 /* ModelMetaTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelMetaTests.h; sourceTree = "<group>"; };
@@ -185,8 +182,6 @@
 				B8EB31B7161E7D7900B6389F /* TestModel.m */,
 				B8267F2E162F48B00069C6ED /* TestModel2.h */,
 				B8267F2F162F48B00069C6ED /* TestModel2.m */,
-				B8283BCC1626095500A54557 /* TestScriptFile.h */,
-				B8283BCD1626095500A54557 /* TestScriptFile.m */,
 				B8283BD31626430900A54557 /* ModelMetaTests.h */,
 				B8283BD41626430900A54557 /* ModelMetaTests.m */,
 				B89279D0161C264000091333 /* Supporting Files */,
@@ -367,7 +362,6 @@
 				B8EB31B5161E79B300B6389F /* DatabaseTests.m in Sources */,
 				B8EB31B8161E7D7900B6389F /* TestModel.m in Sources */,
 				B8D271D91620048500643555 /* MigrationsTests.m in Sources */,
-				B8283BCE1626095500A54557 /* TestScriptFile.m in Sources */,
 				B8283BD51626430900A54557 /* ModelMetaTests.m in Sources */,
 				B8267F30162F48B00069C6ED /* TestModel2.m in Sources */,
 			);
