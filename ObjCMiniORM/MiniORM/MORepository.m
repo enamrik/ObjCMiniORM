@@ -462,15 +462,31 @@ withParameters:(NSArray *)params{
 
 //====================================================================
 //====================================================================
--(NSArray*)queryForType:(Class)type key:(int)key{
+-(id)querySingleForType:(Class)type whereClause:(NSString*)where
+withParameters:(NSArray *)params{
+
+    [self.modelMeta modelAddByType:type];
+    NSString* tableName = [self.modelMeta modelGetTableName];
+    NSArray* records = [self query:[NSString stringWithFormat:
+        @"select * from %@ where %@", tableName, where]
+        withParameters:params forType:type];
+    
+    return [records count]==0? nil:[records objectAtIndex:0];
+}
+
+//====================================================================
+//====================================================================
+-(id)queryForType:(Class)type key:(int)key{
 
     [self.modelMeta modelAddByType:type];
     NSString* tableName = [self.modelMeta modelGetTableName];
     NSString*keyName =[self.modelMeta modelGetPrimaryKeyName];
     
-    return [self query:[NSString stringWithFormat:
+    NSArray* records = [self query:[NSString stringWithFormat:
         @"select * from %@ where %@ = ?", tableName, keyName]
         withParameters:[NSArray arrayWithObject:[NSNumber numberWithInt:key]] forType:type];
+    
+    return [records count]==0? nil:[records objectAtIndex:0];
 }
 
 //====================================================================

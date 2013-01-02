@@ -36,8 +36,9 @@
 -(NSArray*)query:(NSString*) sql  withParameters:(NSArray *)params forType:(Class)clazz;
 -(NSArray*)query:(NSString*) sql  withParameters:(NSArray *)params;
 -(NSArray*)queryForType:(Class)type;
--(NSArray*)queryForType:(Class)type key:(int)key;
--(NSArray*)queryForType:(Class)type whereClause:(NSString*)where  withParameters:(NSArray *)params;
+-(id)queryForType:(Class)type key:(int)key;
+-(NSArray*)queryForType:(Class)type whereClause:(NSString*)where withParameters:(NSArray *)params;
+-(id)querySingleForType:(Class)type whereClause:(NSString*)where withParameters:(NSArray *)params;
 
 -(NSString*)executeSQLScalar:(NSString*)sqlText withParameters:(NSArray *)parameters;
 -(NSInteger)executeInsert:(NSString*)sqlText withParameters:(NSArray *)parameters;
