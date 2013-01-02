@@ -450,6 +450,30 @@
 
 //====================================================================
 //====================================================================
+-(NSArray*)queryForType:(Class)type whereClause:(NSString*)where{
+
+    [self.modelMeta modelAddByType:type];
+    NSString* tableName = [self.modelMeta modelGetTableName];
+    return [self query:[NSString stringWithFormat:
+        @"select * from %@ where %@", tableName, where]
+        withParameters:nil forType:type];
+}
+
+//====================================================================
+//====================================================================
+-(NSArray*)queryForType:(Class)type key:(int)key{
+
+    [self.modelMeta modelAddByType:type];
+    NSString* tableName = [self.modelMeta modelGetTableName];
+    NSString*keyName =[self.modelMeta modelGetPrimaryKeyName];
+    
+    return [self query:[NSString stringWithFormat:
+        @"select * from %@ where %@ = ?", tableName, keyName]
+        withParameters:[NSArray arrayWithObject:[NSNumber numberWithInt:key]] forType:type];
+}
+
+//====================================================================
+//====================================================================
 -(NSArray*)query:(NSString*) sql  withParameters:(NSArray *)params{
      #ifdef GNDATA_QUERY_DEBUG
         NSLog(@"query: %@, withParameters:%@", sql,params);

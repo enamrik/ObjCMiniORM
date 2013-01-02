@@ -214,4 +214,31 @@ static MORepository* _repository = nil;
     STAssertTrue(queryModel != nil, @"WillWorkWithInternalModelMeta");
 }
 
+-(void)testWillQueryForTypes{
+    TestModel *model = [[TestModel alloc]init];
+    model.fullName=@"theModelName";
+    [_repository commit:model];
+ 
+    TestModel* queryModel = [[_repository queryForType:TestModel.class] objectAtIndex:0];
+    STAssertTrue([queryModel.fullName isEqualToString:@"theModelName"], @"Will Query For Types");
+}
+
+-(void)testWillQueryForTypesWithWhereClause{
+    TestModel *model = [[TestModel alloc]init];
+    model.fullName=@"theModelName";
+    [_repository commit:model];
+ 
+    TestModel* queryModel = [[_repository queryForType:TestModel.class whereClause:@"testModelId=1"] objectAtIndex:0];
+    STAssertTrue([queryModel.fullName isEqualToString:@"theModelName"], @"Will Query For Types With Where Clause");
+}
+
+-(void)testWillQueryForTypesWithKey{
+    TestModel *model = [[TestModel alloc]init];
+    model.fullName=@"theModelName";
+    [_repository commit:model];
+ 
+    TestModel* queryModel = [[_repository queryForType:TestModel.class key:1] objectAtIndex:0];
+    STAssertTrue([queryModel.fullName isEqualToString:@"theModelName"], @"Will Query For Types With Key");
+}
+
 @end
