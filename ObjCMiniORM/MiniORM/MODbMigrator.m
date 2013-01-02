@@ -118,6 +118,9 @@ modelMeta;
             for(int propertyIndex = 0; propertyIndex < totalProperties; propertyIndex++){
                 [self.modelMeta propertySetCurrentByIndex:propertyIndex];
                 
+                if([self shouldIgnorePropertyForMigration:self.modelMeta]){
+                    continue;
+                }
                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name == %@",
                     [self.modelMeta propertyGetColumnName]];
                 NSArray *results = [columns filteredArrayUsingPredicate:predicate];
@@ -144,6 +147,9 @@ modelMeta;
     NSMutableArray* properties = [NSMutableArray array];
     for(int propertyIndex = 0; propertyIndex < totalProperties; propertyIndex++){
         [self.modelMeta propertySetCurrentByIndex:propertyIndex];
+        if([self shouldIgnorePropertyForMigration:self.modelMeta]){
+            continue;
+        }
         if([self.modelMeta propertyGetIsKey]){
             [properties addObject:[NSString stringWithFormat:@"%@ INTEGER PRIMARY KEY",
                 [self.modelMeta propertyGetColumnName]]];
@@ -285,6 +291,10 @@ modelMeta;
        return @"NUMBER";
     }
     return @"";
+}
+
+-(BOOL)shouldIgnorePropertyForMigration:(MODbModelMeta*)meta{
+    return[meta propertyGetIsReadOnly]||[meta propertyGetIgnore];
 }
 
 @end

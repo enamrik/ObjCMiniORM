@@ -190,4 +190,48 @@
     STAssertTrue([records count] == 1,@"AddColumnsToExistingTable");
 }
 
+-(void)testWillIgnoreProperties{
+    MODbModelMeta *meta=[[MODbModelMeta alloc]init];
+    MORepository *repository=[[MORepository alloc]init];
+    [repository open];
+    MODbMigrator *migrator = [[MODbMigrator alloc]initWithRepo:repository andMeta:meta];
+    
+    [meta modelAddByType:TestModel.class];
+    [meta propertySetCurrentByName:@"ignoreProperty"];
+    [meta propertySetIgnore:true];
+    [meta propertySetCurrentByName:@"modelDate"];
+    [meta propertySetIgnore:true];
+    [meta propertySetCurrentByName:@"readonlyProperty"];
+    [meta propertySetIsReadOnly:true];
+
+    BOOL allOkay = [migrator updateDatabaseAndRunScripts:true];
+     STAssertTrue(allOkay,@"WillIgnoreProperties - sql did run");
+    
+    NSArray* records =[repository query:@"pragma table_info(TestModel)" withParameters:nil];
+    
+    NSArray* filter = [records filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:
+    ^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [[evaluatedObject objectForKey:@"name"] isEqualToString:@"ignoreProperty"];
+    }]];
+    STAssertTrue([filter count] == 0,@"WillIgnoreProperties - didn't add ignoreProperty");
+
+    filter = [records filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:
+    ^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [[evaluatedObject objectForKey:@"name"] isEqualToString:@"readonlyProperty"];
+    }]];
+    STAssertTrue([filter count] == 0,@"WillIgnoreProperties - didn't add readonlyProperty");
+    
+    filter = [records filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:
+    ^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [[evaluatedObject objectForKey:@"name"] isEqualToString:@"modelDate"];
+    }]];
+    STAssertTrue([filter count] == 0,@"WillIgnoreProperties - didn't add modelDate");
+    
+    filter = [records filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:
+    ^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return [[evaluatedObject objectForKey:@"name"] isEqualToString:@"fullName"];
+    }]];
+    STAssertTrue([filter count] == 1,@"WillIgnoreProperties - add fullName");
+}
+
 @end
