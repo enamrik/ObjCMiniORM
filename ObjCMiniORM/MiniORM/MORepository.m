@@ -76,6 +76,16 @@
 }
 
 //====================================================================
+// Resets the whole database file (means all migration needs to be
+// executed again)
+//====================================================================
+-(void)resetDB {
+    NSFileManager *filemgr = [NSFileManager defaultManager];
+    [filemgr removeItemAtPath: self.filePathName error: NULL];
+    [self initSetup];
+}
+
+//====================================================================
 //====================================================================
 -(void) mergeModelMeta:(MODbModelMeta*)meta{
     [self.modelMeta merge:meta];
@@ -420,6 +430,21 @@
 	
 	sqlite3_finalize(stat);
 	return records;
+}
+
+//====================================================================
+// Queries all records for a specific type
+//====================================================================
+-(NSArray*)queryForType:(Class)type {
+
+    // add or set the current model
+    [self.modelMeta modelAddByType:type];
+
+    // get table name for type
+    NSString* tableName = [self.modelMeta modelGetTableName];
+    
+    // use the table name
+    return [self query:[NSString stringWithFormat:@"select * from %@", tableName] withParameters:nil forType:type];
 }
 
 //====================================================================

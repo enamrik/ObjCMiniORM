@@ -20,6 +20,8 @@
 -(id)initWithBundleFile:(NSString*)name;
 -(id)initWithBundleFile:name dbFilePath:pathName;
 
+-(void)resetDB;
+
 -(NSString*)getFilePathName;
 -(void) mergeModelMeta:(MODbModelMeta*)meta;
 -(BOOL)open;
@@ -33,6 +35,7 @@
 
 -(NSArray*)query:(NSString*) sql  withParameters:(NSArray *)params forType:(Class)clazz;
 -(NSArray*)query:(NSString*) sql  withParameters:(NSArray *)params;
+-(NSArray*)queryForType:(Class)type;
 
 -(NSString*)executeSQLScalar:(NSString*)sqlText withParameters:(NSArray *)parameters;
 -(NSInteger)executeInsert:(NSString*)sqlText withParameters:(NSArray *)parameters;
